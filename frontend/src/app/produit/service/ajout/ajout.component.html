@@ -1,0 +1,144 @@
+
+@if(emailLocalStorage=="admin@gmail.com"){
+  <button type="button" class="btns btnAjout" data-bs-toggle="modal" data-bs-target="#staticBackdrop"  data-aos="fade-up">
+    <i class="fa fa-plus-circle" aria-hidden="true"></i>
+    Add Product
+    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+      {{sommes}}
+    </span>
+  </button>
+}
+
+  <!-- Modal -->
+  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">Add Product</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+
+            <form [formGroup]="myForm" (ngSubmit)="ajoutProduit()" class="row g-3">
+
+              <!-- Designation -->
+              <div class="col-md-6">
+                <label for="designation_p" class="form-label">Designation</label>
+                <input formControlName="designation_p" class="form-control" id="designation_p" type="text" [(ngModel)]="designation_p" required>
+
+                <div *ngIf="myForm.get('designation_p')?.invalid && myForm.get('designation_p')?.touched">
+                  <small class="text-danger" *ngIf="myForm.get('designation_p')?.errors?.['required']">
+                    The repository designation is required.
+                  </small>
+                </div>
+
+              </div>
+
+              <!-- category -->
+              <div class="col-md-6">
+                <label for="categorie_p" class="form-label">Category</label>
+                <input formControlName="categorie_p" class="form-control" id="categorie_p" type="text" [(ngModel)]="categorie_p" required>
+
+                <div *ngIf="myForm.get('categorie_p')?.invalid && myForm.get('categorie_p')?.touched">
+                  <small class="text-danger" *ngIf="myForm.get('categorie_p')?.errors?.['required']">
+                    The repository Category is required.
+                  </small>
+                </div>
+              </div>
+
+              <!-- largeur -->
+              <div class="col-md-6">
+                <label for="largeur" class="form-label">Largeur</label>
+                <input formControlName="largeur" class="form-control" id="largeur" type="number" [(ngModel)]="largeur" required>
+
+                <div *ngIf="myForm.get('largeur')?.invalid && myForm.get('largeur')?.touched">
+                  <small class="text-danger" *ngIf="myForm.get('largeur')?.errors?.['required']">
+                    The repository Largeur is required.
+                  </small>
+                  
+                    <!-- Erreur pour quantité égale à 0 -->
+                    <small class="text-danger" *ngIf="myForm.get('largeur')?.errors?.['zeroQuantity']">
+                      La quantité largeur ne peut pas être inférieur et égale à zéro.
+                    </small>
+                </div>
+              </div>
+
+              <!-- longeur -->
+              <div class="col-md-6">
+                <label for="longeur" class="form-label">Longeur</label>
+                <input formControlName="longeur" class="form-control" id="longeur" type="number" [(ngModel)]="longeur" required>
+
+                <div *ngIf="myForm.get('longeur')?.invalid && myForm.get('longeur')?.touched">
+                  <small class="text-danger" *ngIf="myForm.get('longeur')?.errors?.['required']">
+                    The repository Longeur is required.
+                  </small>
+
+                  <!-- Erreur pour quantité égale à 0 -->
+                  <small class="text-danger" *ngIf="myForm.get('longeur')?.errors?.['zeroQuantity']">
+                    La quantité longeur ne peut pas être inférieur et égale à zéro.
+                  </small>
+                </div>
+              </div>
+
+              <!-- hauteur -->
+              <div class="col-md-6">
+                <label for="hauteur" class="form-label">Height</label>
+                <input formControlName="hauteur" class="form-control" id="hauteur" type="number" [(ngModel)]="hauteur" required>
+
+                <div *ngIf="myForm.get('hauteur')?.invalid && myForm.get('hauteur')?.touched">
+                  <small class="text-danger" *ngIf="myForm.get('hauteur')?.errors?.['required']">
+                    The repository hauteur is required.
+                  </small>
+
+                  <!-- Erreur pour quantité égale à 0 -->
+                  <small class="text-danger" *ngIf="myForm.get('hauteur')?.errors?.['zeroQuantity']">
+                    La quantité hauteur ne peut pas être inférieur et égale égale à zéro.
+                  </small>
+                </div>
+              </div>
+
+              <!-- prix -->
+              <div class="col-md-6">
+                <label for="prix_p" class="form-label">Price</label>
+                <input formControlName="prix_p" class="form-control" id="prix_p" type="number" [(ngModel)]="prix_p" required>
+
+                <div *ngIf="myForm.get('prix_p')?.invalid && myForm.get('prix_p')?.touched">
+                  <small class="text-danger" *ngIf="myForm.get('prix_p')?.errors?.['required']">
+                    The repository price is required.
+                  </small>
+
+                  <!-- Erreur pour quantité égale à 0 -->
+                  <small class="text-danger" *ngIf="myForm.get('prix_p')?.errors?.['zeroQuantity']">
+                    La prix ne peut pas être égale inférieur et égale à zéro.
+                  </small>
+                </div>
+              </div>
+
+              <!-- preview -->
+              <div class="col-md-12">
+                <img [src]="preview" class="preview" alt="">
+              </div>
+
+              <!-- image -->
+              <div class="col-md-12">
+                <label for="photo_p" class="form-label">Image</label>
+                <input (change)="selectFile($event)" formControlName="photo_p" [(ngModel)]="photo_p" type="file" class="form-control" id="photo_p" required>
+
+                <div *ngIf="myForm.get('photo_p')?.invalid && myForm.get('photo_p')?.touched">
+                  <small class="text-danger" *ngIf="myForm.get('photo_p')?.errors?.['required']">
+                    The repository picture is required.
+                  </small>
+                </div>
+              </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-success" [disabled]="!myForm.valid" data-bs-dismiss="modal">Validate</button>
+              </div>
+            </form>
+
+          </div>
+      </div>
+    </div>
+  </div>
+

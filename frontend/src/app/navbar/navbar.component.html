@@ -1,0 +1,75 @@
+  <nav class="bg-navbar" >
+
+    <div class="icone_menu">
+
+      <div class="icone">
+
+        <div>
+          <fa-icon [icon]="faTachometerAlt" class="me-2"></fa-icon> 
+        </div>
+        @if (emailStorage == "admin@gmail.com") {
+        <div>
+          <fa-icon [icon]="faUser" class="me-2"></fa-icon> 
+        </div>
+        }
+        <div>
+          <fa-icon [icon]="faLocation" class="me-2"></fa-icon> 
+        </div>
+        <div>
+          <fa-icon [icon]="faBox" class="me-2"></fa-icon>
+        </div>
+        <div>
+          <fa-icon [icon]="faWarehouse" class="me-2"></fa-icon> 
+        </div>
+        <div>
+          <fa-icon [icon]="faExchangeAlt" class="me-2"></fa-icon> 
+        </div>
+        <div>
+          <fa-icon [icon]="faClipboardList" class="me-2"></fa-icon> 
+        </div>
+      </div>
+
+      <div class="menu">
+
+
+        <div>
+          <a [routerLink]="['/gestion_de_stock_multi-tâche']" class="nav-link">
+            Dashboard          
+          </a>  
+        </div>
+        @if (emailStorage == "admin@gmail.com") {
+        <div>
+          <a [routerLink]="['/gestion_de_stock_multi-tâche/utilisateur']" class="nav-link">
+            Utilisateur
+          </a>
+        </div>
+      }
+
+        <div>
+          <a [routerLink]="['/gestion_de_stock_multi-tâche/emplacements']" class="nav-link">
+            Emplacements
+          </a>
+        </div>
+        <div>      
+          <a [routerLink]="['/gestion_de_stock_multi-tâche/produit']" class="nav-link">
+            Produit
+          </a>
+        </div>
+        <div>
+          <a [routerLink]="['/gestion_de_stock_multi-tâche/depot']" class="nav-link">
+            Depot
+          </a>  
+        </div>
+        <div>
+          <a [routerLink]="['/gestion_de_stock_multi-tâche/mouvement']" class="nav-link">
+            Mouvement
+          </a>
+        </div>
+        <div>
+          <a [routerLink]="['/gestion_de_stock_multi-tâche/stock']" class="nav-link">
+            Stock
+          </a>
+        </div>
+      </div>
+    </div>
+   </nav>

@@ -1,0 +1,11 @@
+.swal-custom-padding .swal2-popup {
+  padding: 2rem; /* Ajustez la valeur de padding selon vos besoins */
+}
+.lesBouttons {
+  display: flex;
+  align-items: center;
+}
+.modal{
+  color: black;
+}
+

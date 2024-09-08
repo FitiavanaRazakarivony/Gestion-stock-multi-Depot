@@ -1,0 +1,46 @@
+<div class="blockMere" data-aos="zoom-out">
+  <div class="card authentification" data-aos="zoom-in">
+    <div class="card-body">
+      <h1>Login</h1>
+        <form [formGroup]="myForm" (ngSubmit)="login()" #loginForm="ngForm" class="login mt-4">
+            <div class="mb-3 row">
+              <div>
+                <span class="col-sm-2 col-form-label" >
+                  Email
+                </span>
+              </div>
+              <div class="col-sm-10">
+                  <input type="email" name="email_ut" formControlName="email_ut"  [(ngModel)]="email_ut" class="form-control">
+
+                  <div *ngIf="myForm.get('email_ut')?.invalid && myForm.get('email_ut')?.touched">
+                    <small class="text-danger" *ngIf="myForm.get('email_ut')?.errors?.['required']">
+                      The repository email is required.
+                    </small>
+                  </div>
+              </div>
+
+            </div>
+            <div class="mb-3 row">
+              <div>
+                <span class="col-sm-2 col-form-label" >
+                  Password
+                </span>
+              </div>
+                <div class="col-sm-10">
+                    <input type="password" name="mdp_ut" formControlName="mdp_ut"  [(ngModel)]="mdp_ut"  class="form-control" id="inputPassword">
+
+                    <div *ngIf="myForm.get('mdp_ut')?.invalid && myForm.get('mdp_ut')?.touched">
+                      <small class="text-danger" *ngIf="myForm.get('mdp_ut')?.errors?.['required']">
+                        The repository password is required.
+                      </small>
+                    </div>
+
+                 </div>
+            </div>
+            <div class="boutton mt-5">
+                <button type="submit" [disabled]="myForm.invalid" class="btn seConnecter">Se connecter</button>
+            </div>
+        </form>
+    </div>
+  </div>
+</div>

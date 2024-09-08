@@ -1,0 +1,42 @@
+.alert-danger {
+    background-color: rgb(39, 38, 38);
+    color: white;
+    border: 2px solid red;
+  }
+  
+  .alert-warning {
+    background-color: orange;
+    color: white;
+  }
+  
+  .alert-info {
+    background-color: rgb(39, 38, 38);
+    color: white;
+    border: 2px solid blue;
+
+  }
+  
+  .alert-success {
+    background-color: rgb(39, 38, 38);
+    color: white;
+    border: 2px solid green;
+  }
+  
+
+  /* temoin */
+  .blinking {
+    animation: blinkingCard 2s infinite;
+  }
+  
+  @keyframes blinkingCard {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  

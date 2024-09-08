@@ -1,0 +1,15 @@
+<div class="dashboard-container">
+  <!-- Barre latérale pour le menu -->
+  <div class="sidebar">
+    <app-navbar></app-navbar>
+    <app-seDeconnecter></app-seDeconnecter>
+  </div>
+
+  <!-- Contenu principal du tableau de bord -->
+  <div class="main-content">
+    <h3 data-aos="fade-down">{{titre}}</h3>
+    <app-ajout-mouvement (onAdd)="addMouvement($event)"></app-ajout-mouvement>
+    <app-list-mouvement [mouvements]="mouvements"></app-list-mouvement>
+ 
+  </div>
+</div>

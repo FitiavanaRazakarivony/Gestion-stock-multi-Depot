@@ -1,0 +1,36 @@
+
+h5{
+  color: white;
+}
+.actif{
+  display: flex;
+  margin: auto;
+  row-gap: 2rem;
+}
+
+.bg-navbar{
+  background-color: rgb(75, 72, 72);
+  position: fixed;
+  border-radius: 11px;
+  padding: 20px;
+  margin-top: 6rem;
+  width: 12rem;
+  height: 60vh;
+}
+
+.icone_menu{
+  display: flex;
+}
+
+.icone{
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+  align-items: center;
+}
+.menu{
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+}
+

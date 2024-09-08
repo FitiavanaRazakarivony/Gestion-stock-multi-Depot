@@ -1,0 +1,21 @@
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-4" *ngFor="let emplacement of Emplacements">
+      <div class="card mb-4" [ngClass]="getClassByPercentage(emplacement.pourcentage)">
+        <div class="card-body">
+          <h5 class="card-title">{{ emplacement.depot.nom_dep }}</h5>
+          <h6>{{ emplacement.nom_em }}</h6>
+          <!-- Ajout de texte supplémentaire -->
+          <p class="card-text">
+            {{ emplacement.pourcentage >= 100 ? 'Plein' : emplacement.pourcentage ? (100 - emplacement.pourcentage) + ' %' : '100 %' }}          
+          <p class="card-text">
+            Capacité maximale : {{ emplacement.qtt_max }} unités
+          </p>
+          <p class="card-text">
+            Capacité actuelle : {{ emplacement.qtt_actuel }} unités
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

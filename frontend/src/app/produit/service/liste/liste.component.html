@@ -1,0 +1,343 @@
+<!-- Liste Produit -->
+<!-- <div>
+  <input [(ngModel)]="searchTerm" placeholder="Search users..." />
+  <button (click)="onSearch()">Search</button>
+
+  <div *ngIf="searchResults.length > 0">
+    <ul>
+      <li *ngFor="let produits of searchResults">{{ produits.designation_p }}</li>
+    </ul>
+  </div>
+</div> -->
+
+<div class="card mt-3 widthTable" data-aos="fade-down">
+  <table class="table table-striped">
+    <thead class="table-dark">
+      <tr>
+        <th scope="col">Image</th>
+        <th scope="col">Designation</th>
+        <th scope="col">Category</th>
+        <th scope="col">Longeur</th>
+        <th scope="col">Largeur</th>
+        <th scope="col">Height</th>
+        <th scope="col">Prix</th>
+        <th scope="col">Volume</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let produit of produits" class="table-secondary">
+        <td>
+          <img class="image" src ="{{environment}}/fichier/{{produit.photo_p}}" alt="image">
+        </td>
+        <td>{{produit.designation_p}}</td>
+        <td>{{produit.categorie_p}}</td>
+        <td>{{produit.longeur}}</td>
+        <td>{{produit.largeur}}</td>
+        <td>{{produit.hauteur}}</td>
+        <td>{{produit.prix_p}}</td>
+        <td>{{produit.volume}}</td>
+        <td>
+          <!-- <button type="button" class="btn btn-dark me-2">Modif</button>
+          <button
+              type="button"
+              class="btn btn-danger ms-2"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
+              (click)="setIdDelete(produit.id_p)"
+          >supp</button> -->
+
+        @if(emailLocalStorage=="admin@gmail.com"){
+
+          <app-boutton-delete
+          type="button"
+          class="btn btn-danger ms-2"
+          data-bs-toggle="modal"
+          data-bs-target="#exampleModal"
+          (click)="setIdDelete(produit.id_p)"
+          >
+          </app-boutton-delete> 
+        }         
+
+          <button 
+            class="btn btn-primary ms-2" 
+            type="button" 
+            data-bs-toggle="offcanvas" 
+            data-bs-target="#offcanvasFullScreen" 
+            aria-controls="offcanvasFullScreen"
+            (click)="voirLeDetail(produit.id_p)"
+            
+            >
+            <i class="fa fa-eye" aria-hidden="true"></i>
+          </button>
+
+
+          
+          <!-- <button
+          class="btn btn-primary ms-2"
+          type="button"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#offcanvasRight"
+          aria-controls="offcanvasRight"
+          (click)="voirLeDetail(produit.id_p)"
+          >
+          <i class="fa fa-eye" aria-hidden="true"></i>
+          </button> -->
+
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+    <!--  ngx-pagination -->
+
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-end">
+      <li class="page-item disabled" [class.disabled]=" page === 1 ">
+        <a class="page-link" (click)="handlePageChange(page - 1)">Previous</a>
+      </li>
+      <li class="page-item" *ngFor="let page of [].constructor(totalPage()); let i= index" [class.active]="i + 1 === page">
+        <a class="page-link" (click)="handlePageChange(i + 1)">{{ i + 1}}</a>
+      </li>
+
+      <li class="page-item" [class.disabled]="page === totalPage()">
+        <a class="page-link" (click)="handlePageChange(page + 1)">Next</a>
+      </li>
+    </ul>
+  </nav>
+  
+  <div *ngIf="produits.length === 0" class="aucunProd">
+    <h3>Aucune produit</h3>
+  </div>
+
+  <!-- pas de ngx-pagination -->
+
+  <!-- <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-end">
+      <li class="page-item" [class.disabled]="page === 1">
+        <a class="page-link" (click)="page > 1 && handlePageChange(page - 1)">Previous</a>
+      </li>
+
+      <li class="page-item" *ngFor="let page of [].constructor(totalPage()); let i = index" [class.active]="i + 1 === page">
+        <a class="page-link" (click)="handlePageChange(i + 1)">{{ i + 1 }}</a>
+      </li>
+
+      <li class="page-item" [class.disabled]="page === totalPage()">
+        <a class="page-link" (click)="page < totalPage() && handlePageChange(page + 1)">Next</a>
+      </li>
+    </ul>
+  </nav>
+
+  <pagination-controls (pageChange)="handlePageChange($event)" [maxSize]="5" [autoHide]="true"></pagination-controls> -->
+
+</div>
+
+<!-- modal OUI / Non -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h5 class="modal-title" id="exampleModalLabel">êtes-vous sûr de supprimer ?</h5>
+      </div>
+      <div class="modal-footer position-relative">
+        <button type="button" data-bs-dismiss="modal" class="btn btn-danger-non me-2">NON</button>
+        <button type="button" data-bs-dismiss="modal" class="btn btn-success ms-2" (click)="supprimerProduit(idDelete!)" >OUI</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Historique produit en plein écran -->
+
+<div class="offcanvas offcanvas-start w-100" tabindex="-1" id="offcanvasFullScreen" aria-labelledby="offcanvasFullScreenLabel">
+  <div class="offcanvas-header">
+    <h3>Détails du produit</h3>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body ">
+    
+    <div class="produit container">
+
+      <div class="produitEtStock">
+        <div class="descriptionProduit" *ngIf="histoProduit">
+          <img class="imageDetailProduit" src ="{{environment}}/fichier/{{histoProduit.photo_p}}" alt="image">
+  
+          <div class="aproposProduit">
+
+            <ul class="detailListeProduit">
+              <li>
+                <b>Désignation :</b>
+                <span>{{histoProduit.designation_p}}</span>
+              </li>
+              
+              <li>
+                <b>Prix :</b> 
+                <span>{{histoProduit.prix_p}}</span>
+              </li>
+              
+              <li>
+                <b>Catégorie :</b> 
+                <span>{{histoProduit.categorie_p}}</span>
+              </li>
+
+              <li>
+                <b>Hauteur :</b> 
+                <span>{{histoProduit.hauteur}}</span> 
+              </li>
+
+              <li>
+                <b>Largeur :</b> 
+                <span>{{histoProduit.largeur}}</span>
+              </li>
+              
+              <li>
+                <b>Longeur :</b> 
+                <span>{{histoProduit.longeur}}</span>
+              </li>
+
+              <li>
+                <b>Volume :</b> 
+                <span>{{histoProduit.volume}}</span>
+              </li>
+            </ul>
+            
+          </div>
+        </div>
+  
+        <div class="stock">
+
+
+          <div>
+            <h4>Stock</h4>
+            <ul class="detailListeProduit">
+              <!-- Boucle pour afficher les stocks -->
+              <li *ngFor="let stock of stocks; trackBy: trackById">
+                {{ stock.qtt_st }}
+              </li>
+          
+              <!-- Si la liste est vide, afficher un message -->
+              <li *ngIf="stocks.length === 0">Aucun stock</li>
+            </ul>
+          </div>
+        
+            
+
+          <!-- Liste des emplacements -->
+          <div>
+            <h4>Emplacements</h4>
+            <ul class="detailListeEmplacements">
+              <li *ngFor="let emplacement of emplacements" class="mt-4">
+                <strong>Nom :</strong> {{ emplacement.nom_em }} <br />
+                <strong>Quantité maximale :</strong> {{ emplacement.qtt_max }} <br />
+                <strong>Quantité actuelle :</strong> {{ emplacement.qtt_actuel }}
+              </li>
+              <li *ngIf="emplacements.length ==0">Aucun Emplacements</li>
+            </ul>
+          </div>
+          
+
+        </div>
+      </div>
+
+      <h4 class="">
+        Mouvements
+      <span class="badge rounded-pill bg-danger">
+        {{countProduitParMouvement}}
+      </span>
+      </h4>
+
+      <!-- Liste des mouvements -->
+      <div class="mouvements">
+
+        @for (mouvement of mouvements; track mouvement.id_mvt){
+      
+          <ul class="detailListeProduit">
+            
+            <li> 
+              <b>Dépot:</b> 
+              <span>{{ mouvement.depot.nom_dep }}</span>
+              <span>{{ mouvement.depot.emplacements.nom_em }}</span>
+            </li>
+            <li> 
+              <b>Date:</b>
+              <span>{{mouvement.date_mvt | date: 'dd-MM-YYYY à HH:mm:ss'}}</span> 
+            </li>
+            <li> 
+              <b>Quantité:</b>
+              <span>
+                {{ mouvement.qtt_mvt }}
+              </span> 
+            </li>
+
+          </ul>
+        }@empty{
+          <li>Aucune mouvement</li>
+        }
+      </div>
+      
+    </div>
+
+  </div>
+</div>
+<!-- 
+Historique produit
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+  <div class="offcanvas-header">
+    <h5 id="offcanvasRightLabel">Détails produit</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+
+    <div>
+      <span *ngIf="histoProduit">
+        <img class="image" src ="{{environment}}/fichier/{{histoProduit.photo_p}}" alt="image">
+        <br>
+        <b>id :</b>   {{histoProduit.id_p}} <br>
+        <b>Désignation :</b>   {{histoProduit.designation_p}} <br>
+        <b>Prix :</b>   {{histoProduit.prix_p}} <br>
+        <b>Hauteur :</b>   {{histoProduit.hauteur}} <br>
+        <b>Categorie_p :</b>  {{histoProduit.categorie_p}} <br>
+        <b>Largeur :</b>  {{histoProduit.largeur}} <br>
+        <b>Longeur :</b>  {{histoProduit.longeur}} <br>
+        <b>volume :</b>  {{histoProduit.volume}} <br>
+      </span>
+
+    <h1> Stock </h1>  
+    @for (stock of stocks; track stock.id_st)
+    {
+      <ul>
+        <li> 
+          Quantité: {{stock.qtt_st}}
+        </li>
+      </ul>
+    }@empty
+    {
+      <li>Aucune stock</li>
+    }
+
+
+     <h1 class="mt-4"> Mouvements</h1>
+
+      @for (mouvement of mouvements; track mouvement.id_mvt)
+      {
+        <ul>
+          <li> Numéro: {{ mouvement.id_mvt }}</li>
+          <li> Quantité: {{ mouvement.qtt_mvt }}</li>
+          <li> Dépot: {{ mouvement.depot.nom_dep }}</li>
+          <li> Date: {{mouvement.date_mvt | date: 'dd-MM-YYYY à HH:mm:ss'}}</li>
+        </ul>
+        
+      } @empty      
+      {
+      <li>Aucune mouvement.</li>
+      }     
+
+    </div>
+
+  </div>
+</div> -->

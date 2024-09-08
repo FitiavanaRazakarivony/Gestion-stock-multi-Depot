@@ -1,0 +1,84 @@
+
+<!-- Liste stock -->
+<div class="card mt-4 widthTable" data-aos="fade-down">
+  <table class="table table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th scope="col">Produit</th>
+          <th scope="col">Emplacement</th>
+          <th scope="col">Quantité</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let stock of stocks" class="table-secondary">
+          <td>{{stock.produit.designation_p}}</td>
+          <td>{{stock.depot.nom_dep}}</td>
+          <td>{{stock.qtt_st}}</td>
+          <td>
+
+            <app-boutton-delete
+              type="button"
+              class="btn btn-danger ms-2"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
+              (click)="setIdDelete(stock.id_st)"
+              >
+              </app-boutton-delete>
+
+              <button
+              class="btn btn-primary ms-2"
+              type="button"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#offcanvasRight"
+              aria-controls="offcanvasRight"
+              (click)="voirLeDetail(stock.id_st)"
+              >
+              <i class="fa fa-eye" aria-hidden="true"></i>
+              </button>
+          </td>
+        </tr>
+      </tbody>
+  </table>
+  <div *ngIf="stocks.length === 0">
+    <h3>Aucune stock</h3>
+  </div>
+</div>
+
+<!-- modal OUI / Non -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h5 class="modal-title" id="exampleModalLabel">êtes-vous sûr de supprimer ?</h5>
+      </div>
+      <div class="modal-footer position-relative">
+        <button type="button" data-bs-dismiss="modal" class="btn btn-danger-non me-2">NON</button>
+        <button type="button" data-bs-dismiss="modal" class="btn btn-success ms-2" (click)="supprimer(idDelete!)" >OUI</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Historique stock -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+  <div class="offcanvas-header">
+    <h5 id="offcanvasRightLabel">Historique stock</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+
+    <div>
+      <span *ngIf="histoStock">
+        <b>Nom depôt</b>  : {{histoStock.depot.nom_dep}} <br>
+        <b>Nom produit</b>  : {{histoStock.produit.designation_p}} <br>
+        <b>Quantité stock</b> : {{histoStock.qtt_st}} <br>
+     </span>
+    </div>
+
+  </div>
+</div>
+

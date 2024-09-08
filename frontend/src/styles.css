@@ -1,0 +1,193 @@
+/* You can add global styles to this file, and also import other style files */
+body{
+  background-color: black;
+  color: rgb(242, 242, 242);
+  font-family: cursive;
+  margin: 2rem;
+}
+.modal-content{
+  background-color: rgb(46 46 46);
+
+  color: white;
+  border-radius: 10px;
+}
+*{
+  list-style: none;
+}
+h3{
+  display: flex;
+  justify-content: center;
+}
+.form-control{
+  background-color: rgb(30, 27, 27);
+  color: rgb(243, 235, 235);
+  border-radius: 1rem;
+}
+.form-control:focus{
+  background-color: rgb(30, 27, 27);
+  color: rgb(243, 235, 235);
+}
+.form-select{
+  background-color: rgb(30, 27, 27);
+  color: rgb(243, 235, 235);
+  border-radius: 1rem;
+}
+
+.modal{
+  color: black;
+}
+.text-danger{
+  color: rgb(255, 39, 60) !important;
+}
+
+/*
+.widthTable{
+  width: 156vh;
+  margin-left: 13rem;
+  background-color: rgb(66, 66, 66);
+} */
+
+.displayFlex{
+  margin: rem;
+}
+/* boutton */
+.btn-secondary:hover{
+  background-color: rgb(30, 27, 27);
+  border: gray 1px solid;
+}
+.bg-danger{
+  background-color:rgb(90, 50, 234) !important;;
+}
+
+.btnAjout{
+  background-color: #bd0303;
+  width: 12rem;
+  display: flex;
+  column-gap: 9px;
+  border-radius: 12rem;
+  margin-top: 36px;
+  color: rgb(255, 255, 255);
+  border: #bd0303 1px solid;
+  align-items: center;
+  align-content: center;
+  flex-wrap: nowrap;
+  justify-content: center;
+}
+
+.btnAjout:hover{
+  background-color: rgb(30, 27, 27);
+  border: 1px solid #bd0303;
+  transition: 0.5s;
+}
+.btn-close{
+  background-color: white;
+}
+.btn-close:hover{
+  background-color: rgb(239, 5, 5);
+}
+.btn-success{
+  width: 9rem;
+  background-color: #0c890c;
+  border: 1px #0c890c solid;
+  border-radius: 11rem;
+}
+.btn-success:hover{
+  border: 1px solid #0c890c;
+  background-color: rgb(30, 27, 27);
+}
+.btn-danger-non{
+  width: 9rem;
+  background-color: #e62309;
+  border: 1px #e62309 solid;
+  border-radius: 11rem;
+  color: white;
+}
+.btn-danger-non:hover{
+  border: 1px solid #e62309;
+}
+/* fin boutton */
+.btn-secondary{
+  border-radius: 11rem;
+  width: 9rem;
+}
+/* Style par défaut pour les écrans d'ordinateur standard (ordinateurs portables et de bureau) */
+.widthTable {
+  width: 74vw; /* Largeur ajustée pour les écrans standard */
+  background-color: rgb(66, 66, 66);
+}
+
+/* Pour les écrans de moins de 1024px (petits ordinateurs portables et grandes tablettes) */
+@media (max-width: 1024px) {
+  .widthTable {
+    width: 80vw; /* Ajustement pour mieux s'adapter aux écrans légèrement plus petits */
+    margin-left: 2rem; /* Réduction de la marge pour éviter les débordements */
+    margin-right: 2rem;
+  }
+}
+
+/* Pour les écrans de moins de 768px (tablettes et téléphones) */
+@media (max-width: 768px) {
+  body {
+    font-size: 14px; /* Ajustement de la taille de la police */
+  }
+
+  .widthTable {
+    width: 90vw; /* Adapte la largeur pour les tablettes */
+    margin-left: 2rem; /* Réduction de la marge pour éviter les débordements */
+    margin-right: 2rem;
+  }
+}
+
+/* Pour les écrans de moins de 480px (téléphones) */
+@media (max-width: 480px) {
+  body {
+    font-size: 12px; /* Ajustement de la taille de la police pour les très petits écrans */
+  }
+
+  .widthTable {
+    width: 100vw; /* Adapte la largeur à 100% de l'écran */
+    margin-left: 0; /* Suppression de la marge pour cEntrée sur les petits écrans */
+    margin-right: 0;
+  }
+}
+.offcanvas-header {
+  display: flex;
+  padding: var(--bs-offcanvas-padding-y) var(--bs-offcanvas-padding-x);
+  flex-direction: column-reverse;
+  align-items: center;
+  background-color: black;
+  color: #ffffff;
+}
+.offcanvas-body {
+  flex-grow: 1;
+  padding: var(--bs-offcanvas-padding-y) var(--bs-offcanvas-padding-x);
+  overflow-y: auto;
+  background-color: #595858;
+  color: #ffffff;
+}
+
+
+.dashboard-container {
+  display: flex;
+  height: 10vh; /* Utilise toute la hauteur de la page */
+}
+.main-content{
+  margin-top: 2.5rem;
+}.sidebar {
+  width: 250px; /* Largeur de la barre latérale */
+  color: white;
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Ajoute une ombre pour un effet visuel */
+}
+
+.titre {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+
+.card:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+}
