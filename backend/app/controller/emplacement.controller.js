@@ -69,9 +69,8 @@ exports.modificationemplacement = async (req, res)=>{
 // prend stock par id
 exports.getIdEmplacement = async (req,res) =>{
     try {
-     
         let id = req.params.id_em;
-        const emplacement = await emplacementRepository.findById(id);
+        const emplacement = await emplacementRepository.findByEmplacement(id);
         res.status(200).json(emplacement);
 
     } catch (error) {

@@ -16,5 +16,8 @@ class EmplacementRepository{
     async updateEmplacement (id,data){
         return emplacementService.updateEmplacement(id, data);
     }
+    async findByEmplacement(id){
+        return emplacementService.findByEmplacement(id);
+    }
 }
 module.exports = new EmplacementRepository();

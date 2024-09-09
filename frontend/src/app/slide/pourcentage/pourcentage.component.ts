@@ -10,6 +10,8 @@ import { AjoutEmplacementComponent } from '../../emplacement/service/ajout/ajout
 
 export class PourcentageComponent extends AjoutEmplacementComponent{
   
+  emplacement:any;
+
   getClassByPercentage(pourcentage: number): string {
     if (pourcentage >= 100) {
       return 'alert-danger'; // Rouge pour 100% ou plus
@@ -20,6 +22,25 @@ export class PourcentageComponent extends AjoutEmplacementComponent{
     } else {
       return 'alert-success'; // Vert pour en dessous de 20%
     }
+  }
+  
+  voirLeDetail(id: number) {
+
+    // Premier appel pour récupérer les détails du produit
+    this.EmplacementService.getIdEmplacement(id).subscribe(
+      (data: any) => {
+        // Stocker les informations du produit  
+
+        this.emplacement= data;
+
+        console.log('donne', data);     
+        
+      },
+      (error) => {
+        // Gérer les erreurs de l'appel
+        console.error("Erreur lors de la récupération des détails de l'emplacement", error);
+      }
+    );
   }
   
   

@@ -130,8 +130,8 @@ class mouvementService{
 
     async distributeVolume_modification_qtt_actuel(volume_p, emplacements) {
 
-        const a = await emplacementService.pourcentageEmplacement()
-        console.log('aaaaaa', a);
+        // const a = await emplacementService.pourcentageEmplacement()
+        // console.log('aaaaaa', a);
 
         // Répartir le volume entre les emplacements en fonction de l'espace disponible
         const repartition = this.distributeVolume(volume_p, emplacements);

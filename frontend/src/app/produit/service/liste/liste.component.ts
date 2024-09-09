@@ -65,6 +65,9 @@ export class ListeProduitComponent extends AjoutProduitComponent{
           this.mouvements = data.mouvements
           this.stocks = data.stocks
 
+          console.log('produits', data);
+          
+
           data.stocks.forEach((stock: any) => {
             if (stock.depot && stock.depot.emplacements) {
               stock.depot.emplacements.forEach((emplacement: any) => {
