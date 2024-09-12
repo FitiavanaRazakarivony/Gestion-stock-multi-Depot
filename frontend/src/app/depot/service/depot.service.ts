@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http'
 import { EventEmitter, Injectable } from '@angular/core'
 import { Observable } from 'rxjs'
-import { Depot } from '../depot.model'
+import { Depot, DepotResponse } from '../depot.model'
 import { environment } from '../../../environments/environments'
 
 @Injectable({
@@ -15,8 +15,8 @@ export class DepotService {
    
   constructor(private http: HttpClient) {}
 
-  getDepot(page:number): Observable<Depot[]> {
-    return this.http.get<Depot[]>(`${this.apiUrl}?page=${page}`);
+  getDepot(page: number): Observable<DepotResponse> {
+    return this.http.get<DepotResponse>(`${this.apiUrl}?page=${page}`);
   }
   
   ajoutDepot(depot: Depot): Observable<Depot>{

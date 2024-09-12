@@ -66,15 +66,14 @@ export class ListeProduitComponent extends AjoutProduitComponent{
           this.stocks = data.stocks
 
           console.log('produits', data);
-          
 
           data.stocks.forEach((stock: any) => {
             if (stock.depot && stock.depot.emplacements) {
               stock.depot.emplacements.forEach((emplacement: any) => {
                 this.emplacements.push({
                   nom_em: emplacement.nom_em,
-                  qtt_max: emplacement.qtt_max,
-                  qtt_actuel: emplacement.qtt_actuel
+                  volume_max: emplacement.volume_max,
+                  volume_actuel: emplacement.volume_actuel
                 });
               });
             }

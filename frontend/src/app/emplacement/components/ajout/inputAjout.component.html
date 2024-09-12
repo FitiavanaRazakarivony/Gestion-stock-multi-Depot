@@ -1,0 +1,84 @@
+<form [formGroup]="myForm" class="row g-3" (ngSubmit)="ajouterEmplacement()">
+            
+  <div class="">
+    <label for="validationDefault01" class="form-label">Name</label>
+    <input type="text" class="form-control" id="validationDefault01" formControlName="nom_em" [(ngModel)]="nom_em" required>
+    <!-- Affichage du message d'erreur si le champ nom_em est invalide -->
+    <div *ngIf="myForm.get('nom_em')?.invalid && myForm.get('nom_em')?.touched">
+      <small class="text-danger" *ngIf="myForm.get('nom_em')?.errors?.['required']">
+        The repository name is required.
+      </small>
+    </div>
+  </div>
+
+  <div>
+    <label for="validationDefault01" class="form-label">Depot</label>
+    <select class="form-select" aria-label="Default select example" [(ngModel)]="id_dep" name="id_dep" formControlName="id_dep">
+        <option *ngFor="let depot of depots" [value]="depot.id_dep">
+          <span > {{depot.nom_dep}} </span>
+        </option>
+    </select>
+
+    <div *ngIf="myForm.get('id_dep')?.invalid && myForm.get('id_dep')?.touched">
+      <small class="text-danger" *ngIf="myForm.get('id_dep')?.errors?.['required']">
+        The repository depot required.
+      </small>
+    </div>
+  </div>
+
+    <!-- largeur -->
+  <div class="col-md-6">
+    <label for="largeur" class="form-label">Largeur</label>
+    <input formControlName="largeur" class="form-control" id="largeur" type="number" [(ngModel)]="largeur" required>
+
+    <div *ngIf="myForm.get('largeur')?.invalid && myForm.get('largeur')?.touched">
+      <small class="text-danger" *ngIf="myForm.get('largeur')?.errors?.['required']">
+        The repository Largeur is required.
+      </small>
+      
+        <!-- Erreur pour quantité égale à 0 -->
+        <small class="text-danger" *ngIf="myForm.get('largeur')?.errors?.['zeroQuantity']">
+          La quantité largeur ne peut pas être inférieur et égale à zéro.
+        </small>
+    </div>
+  </div>
+
+  <!-- longeur -->
+  <div class="col-md-6">
+    <label for="longeur" class="form-label">Longeur</label>
+    <input formControlName="longeur" class="form-control" id="longeur" type="number" [(ngModel)]="longeur" required>
+
+    <div *ngIf="myForm.get('longeur')?.invalid && myForm.get('longeur')?.touched">
+      <small class="text-danger" *ngIf="myForm.get('longeur')?.errors?.['required']">
+        The repository Longeur is required.
+      </small>
+
+      <!-- Erreur pour quantité égale à 0 -->
+      <small class="text-danger" *ngIf="myForm.get('longeur')?.errors?.['zeroQuantity']">
+        La quantité longeur ne peut pas être inférieur et égale à zéro.
+      </small>
+    </div>
+  </div>
+
+  <!-- hauteur -->
+  <div class="col-md-12">
+    <label for="hauteur" class="form-label">Height</label>
+    <input formControlName="hauteur" class="form-control" id="hauteur" type="number" [(ngModel)]="hauteur" required>
+
+    <div *ngIf="myForm.get('hauteur')?.invalid && myForm.get('hauteur')?.touched">
+      <small class="text-danger" *ngIf="myForm.get('hauteur')?.errors?.['required']">
+        The repository hauteur is required.
+      </small>
+
+      <!-- Erreur pour quantité égale à 0 -->
+      <small class="text-danger" *ngIf="myForm.get('hauteur')?.errors?.['zeroQuantity']">
+        La quantité hauteur ne peut pas être inférieur et égale égale à zéro.
+      </small>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    <button type="submit" class="btn btn-success" [disabled]="myForm.invalid" data-bs-dismiss="modal">Validate</button>
+  </div>
+</form>

@@ -34,7 +34,8 @@ exports.creerMouvement = async (req, res) => {
         const volume_p = produit.longeur * produit.largeur * produit.hauteur;
         if (volume_p <= 0) return res.status(400).json({ erreur: 'Volume du produit non défini ou invalide' });
 
-        await mouvementService.distributeVolume_modification_qtt_actuel(volume_p, emplacements)
+        console.log('volume_p', volume_p);
+        await mouvementService.distributeVolume_modification_volume_actuel(volume_p, emplacements)
 
         // Vérifier l'utilisateur
         const utilisateur = await Utilisateur.findByPk(id_ut);

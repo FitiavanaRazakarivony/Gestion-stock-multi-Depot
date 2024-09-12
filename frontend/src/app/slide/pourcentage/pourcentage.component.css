@@ -1,12 +1,13 @@
-.alert-danger {
+  .alert-danger {
     background-color: rgb(39, 38, 38);
     color: white;
     border: 2px solid red;
   }
   
   .alert-warning {
-    background-color: orange;
+    background-color: rgb(39, 38, 38);
     color: white;
+    border:  2px solid orange;
   }
   
   .alert-info {
@@ -22,7 +23,6 @@
     border: 2px solid green;
   }
   
-
   /* temoin */
   .blinking {
     animation: blinkingCard 2s infinite;

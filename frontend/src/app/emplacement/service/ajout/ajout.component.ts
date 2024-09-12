@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { response } from 'express';
 import { DepotService } from '../../../depot/service/depot.service';
+import { DepotResponse } from '../../../depot/depot.model';
 
 
 @Component({
@@ -24,19 +25,24 @@ export class AjoutEmplacementComponent implements OnInit {
   page = 1
 
   Emplacement:Emplacement ={
-    id_em:0 ,
+    id_em : 0,
     nom_em:'',
-    qtt_max:0,
-    qtt_actuel:0,
-    id_dep:0
+    volume_actuel:0,
+    id_dep:0,
+    longeur: 0,
+    largeur: 0,
+    hauteur: 0,
   };
 
   // id!:number
   idEmplacement: any = null;
   nom_em: string = 'E1';
-  qtt_max!:number ;
-  qtt_actuel:number = 0 ;
+  volume_actuel:number = 0 ;
   id_dep!:number ;
+  longeur!: number;
+  largeur!: number;
+  hauteur!: number;
+  id_em!:number;
   
   // Emplacements: Emplacement[] = [] // Déclarer la propriété Emplacements
   emailLocalStorage = localStorage.getItem("email")
@@ -48,12 +54,18 @@ export class AjoutEmplacementComponent implements OnInit {
   ) {
     this.myForm = this.fb.group({
       nom_em:[this.nom_em, Validators.required],
-      qtt_max:[this.qtt_max, [Validators.required, this.quantityValidator]],
-      qtt_actuel:[this.qtt_actuel, Validators.required],
       id_dep:[this.id_dep, Validators.required],
+      longeur:[this.longeur, [Validators.required, this.invalidValueValidator]],
+      largeur:[this.largeur,  [Validators.required, this.invalidValueValidator]],
+      hauteur:[this.hauteur, [Validators.required, this.invalidValueValidator]],
     })
   }
 
+  // Validateur personnalisé pour vérifier si la quantité est inférieur égale à 0
+  invalidValueValidator(control: AbstractControl): { [key: string]: boolean } | null {
+    return control.value <= 0 ? { zeroQuantity: true } : null;
+  }
+  
   // Validateur personnalisé pour vérifier si la quantité est égale à 0
   quantityValidator(control: AbstractControl): { [key: string]: boolean } | null {
     return control.value <= 0 ? { zeroQuantity: true } : null;
@@ -66,14 +78,24 @@ export class AjoutEmplacementComponent implements OnInit {
       this.listeEmplacements()
     )
     
-    this.depotService.getDepot(this.page).subscribe(data => {
-      this.depots = data;
-    })
+    this.listeDepots();
   }
 
+  listeDepots(): void {
+    this.depotService.getDepot(this.page).subscribe(
+      (data: DepotResponse) => {
+        this.depots = data.depots; // Utilisez la propriété "depots" de "DepotResponse"
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération des données', error);
+      }
+    );
+  }
   listeEmplacements(){
     this.EmplacementService.getEmplacement(this.page).subscribe(data =>{
       this.Emplacements = data;
+      console.log("fsdfqf", data);
+      
     })
   }
 
@@ -86,9 +108,11 @@ export class AjoutEmplacementComponent implements OnInit {
     const emplacement = new Emplacement(
       this.idEmplacement, 
       this.nom_em,
-      this.qtt_max, 
-      this.qtt_actuel,
-      this.id_dep    
+      this.volume_actuel,
+      this.id_dep,
+      this.largeur,
+      this.longeur,
+      this.hauteur
     )
 
     this.EmplacementService.ajoutEmplacement(emplacement).subscribe(

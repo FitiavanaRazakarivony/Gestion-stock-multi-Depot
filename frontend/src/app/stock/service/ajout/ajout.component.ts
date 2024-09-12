@@ -4,6 +4,7 @@ import { ProduitService } from '../../../produit/service/produit.service';
 import { DepotService } from '../../../depot/service/depot.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
+import { DepotResponse } from '../../../depot/depot.model';
 
 
 
@@ -47,13 +48,19 @@ export class AjoutStockComponent {
     this.produitsService.getProduit(this.page).subscribe(data => {
       this.produits = data;
     });
-
-    this.depotService.getDepot(this.page).subscribe(data => {
-      this.depots = data;
-    });
-
+    this.listeDepots();
   }
 
+  listeDepots(): void {
+    this.depotService.getDepot(this.page).subscribe(
+      (data: DepotResponse) => {
+        this.depots = data.depots; // Utilisez la propriété "depots" de "DepotResponse"
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération des données', error);
+      }
+    );
+  }
   ajoutStock() {
     const stock = {
       qtt_st: this.qtt_st,

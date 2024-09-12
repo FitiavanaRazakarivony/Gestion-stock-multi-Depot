@@ -1,5 +1,5 @@
-const {DataTypes}= require('sequelize');
-const sequelize = require ('../config/bd_config');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/bd_config');
 
 const Emplacement = sequelize.define("emplacement", {
     id_em: {
@@ -12,48 +12,60 @@ const Emplacement = sequelize.define("emplacement", {
         allowNull: true,
         unique: true
     },
-    qtt_max: {
+
+    volume_actuel: {
         type: DataTypes.INTEGER,
         allowNull: true,
     },
-    qtt_actuel: {
+    id_dep: {
         type: DataTypes.INTEGER,
-        allowNull: true,
-    },
-    id_dep:{
-        type: DataTypes.INTEGER,
-        references:{
+        references: {
             model: 'depot',
-            key:'id_dep'
-        }
-    },
-    // id_p:{
-    //     type: DataTypes.INTEGER,
-    //     references:{
-    //         model: 'produit',
-    //         key:'id_p'
-    //     }
-    // },
-    qtt_libre:{
-        type: DataTypes.VIRTUAL, 
-        get(){
-            const qtt_max = this.getDataValue('qtt_max');
-            const qtt_actuel = this.getDataValue('qtt_actuel');
-            return qtt_max && qtt_actuel ? qtt_max - qtt_actuel : 0;
+            key: 'id_dep'
         }
     },
 
-    pourcentage:{
+    longeur: {
+        type: DataTypes.INTEGER,
+    },
+    largeur: {
+        type: DataTypes.INTEGER,
+    },
+    hauteur: {
+        type: DataTypes.INTEGER,
+    },
+    
+    volume_max: {
+        type: DataTypes.VIRTUAL, // Utilisation de DataTypes.VIRTUAL car ce champ est calculé
+        get() {
+            // Calcul du volume si longeur, largeur et hauteur sont définis
+            const longeur = this.longeur;
+            const largeur = this.largeur;
+            const hauteur = this.hauteur;
+            return longeur && largeur && hauteur ? longeur * largeur * hauteur : null;
+        }
+    },
+
+    qtt_libre: {
         type: DataTypes.VIRTUAL, 
-        get(){
-            const qtt_max = this.getDataValue('qtt_max');
-            const qtt_actuel = this.getDataValue('qtt_actuel');
-            return qtt_max && qtt_actuel ? qtt_actuel*100/qtt_max : 0;
+        get() {
+            const volume_max = this.volume_max;
+            const volume_actuel = this.volume_actuel;
+            return volume_max && volume_actuel !== null ? volume_max - volume_actuel : 0;
+        }
+    },
+
+    pourcentage: {
+        type: DataTypes.VIRTUAL, 
+        get() {
+            const volume_max = this.volume_max;
+            const volume_actuel = this.volume_actuel;
+            return volume_max && volume_actuel !== null && volume_max !== 0 ? (volume_actuel * 100) / volume_max : 0;
         }
     }
 },
 {
     tableName: 'emplacement'
-});   
+});
 
-module.exports = Emplacement
+module.exports = Emplacement;

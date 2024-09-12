@@ -45,11 +45,12 @@ exports.supprimeremplacement = async(req, res) =>{
 // Modification  emplacement
 exports.modificationemplacement = async (req, res)=>{
     const id = req.params.id_em;
-    const { nom_em, qtt_max, qtt_actuel, id_dep } = req.body;
+    console.log("idddd", id);
+    const { nom_em, volume_max, volume_actuel, id_dep, longeur, largeur, hauteur } = req.body;
 
     try {
         const [modification] = await emplacementRepository.updateEmplacement(
-            { nom_em, qtt_max, qtt_actuel, id_dep }, 
+            { nom_em, volume_max, volume_actuel, id_dep, longeur, largeur, hauteur }, 
             { where:{ id_em : id}
         });
 

@@ -45,3 +45,12 @@ margin: auto;
 .emplacements{
   display: flex;
 }
+
+.fixed-modal {
+  height: 80vh; /* Ajustez la hauteur selon vos besoins */
+}
+
+.modal-body-scrollable {
+  max-height: 60vh; /* Contrôle la hauteur interne du contenu défilable */
+  overflow-y: auto;
+}

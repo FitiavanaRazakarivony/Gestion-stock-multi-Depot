@@ -1,49 +1,73 @@
-
-<!-- Liste stock -->
-<div class="card mt-4 widthTable" data-aos="fade-down">
-  <table class="table table-striped">
+<!-- Liste stock centrée avec produit sur la deuxième ligne -->
+<div class="d-flex justify-content-center">
+  <div class="card mt-4 widthTable" data-aos="fade-down">
+    <table class="table table-striped text-center">
       <thead class="table-dark">
         <tr>
           <th scope="col">Produit</th>
-          <th scope="col">Emplacement</th>
+          <th scope="col">Dépot</th>
           <th scope="col">Quantité</th>
+          <th scope="col">Volume produit</th>
+          <th scope="col" colspan="4">Emplacements</th>
           <th scope="col">Action</th>
+        </tr>
+        <tr class="table-dark">
+          <th colspan="4"></th>
+          <th scope="col">Emplacement</th>
+          <th scope="col">Volume actuel</th>
+          <th scope="col">Volume maximal</th>
+          <th scope="col">Pourcentage occupé</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let stock of stocks" class="table-secondary">
-          <td>{{stock.produit.designation_p}}</td>
-          <td>{{stock.depot.nom_dep}}</td>
-          <td>{{stock.qtt_st}}</td>
+          <td class="align-middle">
+            <p class="mb-0">{{ stock.produit.designation_p }}</p>
+          </td>
+          <td class="align-middle">{{stock.depot.nom_dep}}</td>
+          <td class="align-middle">{{stock.qtt_st}}</td>
+          <td class="align-middle">{{ stock.produit.volume }} m³</td>
+          <td colspan="4">
+            <table class="table table-sm mb-0 text-center">
+              <tbody>
+                <tr *ngFor="let emplacement of stock.depot.emplacements">
+                  <td>{{ emplacement.nom_em }}</td>
+                  <td>{{ emplacement.volume_actuel }} m³</td>
+                  <td>{{ emplacement.volume_max }} m³</td>
+                  <td>{{ emplacement.pourcentage | number: '1.2-2' }}%</td>
+                
+                </tr>
+              </tbody>
+            </table>
+          </td>
           <td>
-
             <app-boutton-delete
               type="button"
               class="btn btn-danger ms-2"
               data-bs-toggle="modal"
               data-bs-target="#exampleModal"
-              (click)="setIdDelete(stock.id_st)"
-              >
-              </app-boutton-delete>
-
-              <button
+              (click)="setIdDelete(stock.id_st)">
+            </app-boutton-delete>
+            <button
               class="btn btn-primary ms-2"
               type="button"
               data-bs-toggle="offcanvas"
               data-bs-target="#offcanvasRight"
               aria-controls="offcanvasRight"
-              (click)="voirLeDetail(stock.id_st)"
-              >
+              (click)="voirLeDetail(stock.id_st)">
               <i class="fa fa-eye" aria-hidden="true"></i>
-              </button>
+            </button>
           </td>
         </tr>
       </tbody>
-  </table>
-  <div *ngIf="stocks.length === 0">
-    <h3>Aucune stock</h3>
+    </table>
+    <div *ngIf="stocks.length === 0" class="text-center">
+      <h3>Aucun stock disponible</h3>
+    </div>
   </div>
 </div>
+
 
 <!-- modal OUI / Non -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

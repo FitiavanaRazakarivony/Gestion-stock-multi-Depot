@@ -30,7 +30,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BouttonUpdateComponent } from './boutton/miseajout/boutton.component';
 import { BouttonDeleteComponent } from './boutton/supprimer/boutton.component';
 import { SeDeconnecterComponent } from './navbar/seDeconnecter/seDeconnecter.component';
-import { RechercheDepotComponent } from './depot/service/recherche/recherche-depot.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { IconsComponent } from './icons/icons.component';
 import { NgxPaginationModule } from 'ngx-pagination';
@@ -38,6 +37,8 @@ import { AjoutEmplacementComponent } from './emplacement/service/ajout/ajout.com
 import { EmplacementComponent } from './emplacement/emplacement.component';
 import { ListeEmplacementComponent } from './emplacement/service/liste/liste-emplacement.component';
 import { PourcentageComponent } from './slide/pourcentage/pourcentage.component';
+import { InputAjoutEmplacementComponent } from './emplacement/components/ajout/inputAjout.component';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -52,17 +53,16 @@ import { PourcentageComponent } from './slide/pourcentage/pourcentage.component'
     FontAwesomeModule,
     RouterModule
   ],
+
   declarations: [
     //icone
     IconsComponent,
-
     AppComponent,
     NavbarComponent,
 
     // Boutton
     BouttonUpdateComponent,
     BouttonDeleteComponent,
-
 
     // slide
     slideComponent,
@@ -82,7 +82,6 @@ import { PourcentageComponent } from './slide/pourcentage/pourcentage.component'
     DepotComponent,
     AjoutDepotComponent,
     ListeDepotComponent,
-    RechercheDepotComponent,
         
     // les modules Stocks
     StockComponent,
@@ -104,7 +103,9 @@ import { PourcentageComponent } from './slide/pourcentage/pourcentage.component'
     //emplacement
     EmplacementComponent,
     AjoutEmplacementComponent,   
-    ListeEmplacementComponent 
+    ListeEmplacementComponent,
+      //InputEmplacementComponent
+      InputAjoutEmplacementComponent
 
 
   ],

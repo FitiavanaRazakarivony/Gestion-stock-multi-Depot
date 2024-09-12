@@ -7,21 +7,23 @@
             <span>{{ emplacement.depot.nom_dep }}</span>
             <i class="fa fa-warehouse" aria-hidden="true"></i>
           </h5>
-          <h6>{{ emplacement.nom_em }}</h6>
+          <h6><i class="fa fa-
+            " aria-hidden="true"></i> {{ emplacement.nom_em }}</h6>
           
           <!-- Texte supplémentaire -->
           <p class="card-text">
-            {{ emplacement.pourcentage >= 100 ? 'Plein' : emplacement.pourcentage ? (100 - emplacement.pourcentage) + ' % restant' : '100 % disponible' }}          
+            {{ emplacement.pourcentage >= 100 ? 'Plein' : emplacement.pourcentage ? (emplacement.pourcentage | number: '1.2-2' ) + ' % restant' : '100 % disponible' }}          
           </p>
           <p class="card-text text-light">
-            Capacité maximale : {{ emplacement.qtt_max }} unités
+            Volume maximale : {{ emplacement.volume_max }} m³
           </p>
           <p class="card-text text-light">
-            Capacité actuelle : {{ emplacement.qtt_actuel }} unités
+            Volume actuelle : {{ emplacement.volume_actuel }} m³
           </p>
 
           <!-- Button trigger modal -->
           <button 
+          *ngIf="emplacement.volume_actuel > 0"
             type="button" 
             class="btn btn-outline-light btn-sm mt-3 w-100" 
             data-bs-toggle="modal" 
@@ -52,7 +54,7 @@
 
           <div class="mb-4">
             <h4 class="mb-2">Dépot: {{ emplacement.depot.nom_dep }}</h4>
-            <p>Capacité actuelle: {{ emplacement.qtt_actuel }} / {{ emplacement.qtt_max }}</p>
+            <p>Capacité actuelle: {{ emplacement.volume_actuel }} / {{ emplacement.volume_max }}</p>
           </div>
 
           <div *ngFor="let stock of emplacement.depot.stocks" class="border-top pt-3 mt-3">
@@ -60,6 +62,7 @@
             <p>Quantité en stock: {{ stock.qtt_st }}</p>
             <p>Prix: {{ stock.produit.prix_p }} Ariary</p>
             <p>Catégorie: {{ stock.produit.categorie_p }}</p>
+            <p>Volume produit: {{ stock.produit.volume }} m³</p>
           </div>
         </div>
 

@@ -4,6 +4,7 @@ import { ProduitService } from '../../../produit/service/produit.service';
 import Swal from 'sweetalert2';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DepotService } from '../../../depot/service/depot.service';
+import { DepotResponse } from '../../../depot/depot.model';
 
 @Component({
   selector: 'app-ajout-mouvement',
@@ -53,13 +54,21 @@ export class AjoutMouvementComponent {
       this.produits = data;
     });
 
-    this.depotService.getDepot(this.page).subscribe(data => {
-      this.depots = data;
-    })
+    this.listeDepots()
     
     this.onRefreshList(); 
   }
-
+  
+  listeDepots(): void {
+    this.depotService.getDepot(this.page).subscribe(
+      (data: DepotResponse) => {
+        this.depots = data.depots; // Utilisez la propriété "depots" de "DepotResponse"
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération des données', error);
+      }
+    );
+  }
   onRefreshList(){
     this.MouvementService.onRefreshList.subscribe(()=>{
       this.listeMouvement();

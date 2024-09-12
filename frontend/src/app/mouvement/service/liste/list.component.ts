@@ -21,9 +21,7 @@ export class ListeMouvementomponent extends AjoutMouvementComponent implements O
     this.produitService.getProduit(this.page).subscribe(data => {
       this.produits = data;
     });
-    this.depotService.getDepot(this.page).subscribe(data => {
-      this.depots = data;
-    })
+    this.listeDepots()
     this.onRefreshList();
   }
   mouvement:Mouvement = {

@@ -1,6 +1,6 @@
 import { Component, Output, EventEmitter, Input, OnInit } from '@angular/core'
 import { DepotService } from '../depot.service'
-import { Depot } from '../../depot.model'
+import { Depot, DepotResponse } from '../../depot.model'
 import Swal from 'sweetalert2';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { response } from 'express';
@@ -31,7 +31,7 @@ export class AjoutDepotComponent implements OnInit {
 
   // depots: Depot[] = [] // Déclarer la propriété depots
   emailLocalStorage = localStorage.getItem("email")
-
+  
   constructor(
     public DepotService: DepotService,
     private fb: FormBuilder
@@ -55,11 +55,19 @@ export class AjoutDepotComponent implements OnInit {
 
   // }
 
-  listeDepots(){
-    this.DepotService.getDepot(this.page).subscribe(data =>{
-      this.depots = data;
-    })
+  listeDepots(): void {
+    this.DepotService.getDepot(this.page).subscribe(
+      (data: DepotResponse) => {
+        this.depots = data.depots;  // Récupérer uniquement les dépôts
+      },
+      (error) => {
+        console.error('Erreur lors de la récupération des données', error);
+      }
+    );
   }
+
+  
+
   handlePageChange(page:any){
     this.page = page;
     this.listeDepots()
@@ -134,26 +142,27 @@ export class AjoutDepotComponent implements OnInit {
   };
 
 
-
- supprimerDep(id:number){
-   const id_dep = this.idDepot
-
-   this.DepotService.supprDepot(id_dep).subscribe(
-
-     (response:Depot) =>{
-
-       const index = this.depots.findIndex(
-         (dep:Depot) => dep.id_dep == id,
-         console.log("id_dep", (dep:Depot)=>dep.id_dep == id)
-
-        )
-        this.depots.splice(index,1) // firy no ho fafana amin ilaina tableaux "index"
-        this.validerSuppr()
-        this.handlePageChange(this.page)
-     },
-
-   )
- }
+  supprimerDep(id: number): void {
+  
+    this.DepotService.supprDepot(id).subscribe(
+      (response: Depot) => {
+        const index = this.depots.findIndex((dep: Depot) => dep.id_dep === id);
+  
+        if (index !== -1) {
+          this.depots.splice(index, 1);
+        } else {
+        }
+  
+        this.validerSuppr();
+        this.handlePageChange(this.page);
+      },
+      (error) => {
+        console.error('Erreur lors de la suppression du dépôt', error);
+      }
+    );
+  }
+  
+  
 
 
  modification(){
@@ -174,6 +183,7 @@ export class AjoutDepotComponent implements OnInit {
        console.log("aaaa", nom_dep);
 
        this.valider();
+       this.DepotService.onRefreshList.emit()
      },
      error:(err) =>{
        console.log("err", err);

@@ -1,36 +1,51 @@
 <!-- Liste Depot -->
 
-<div class="card mt-4 widthTable"  data-aos="fade-down">
-  <table class="table table-striped">
-      <thead class="table-dark">
-        <tr>
-          <th scope="col">Depot name</th>
-          <th scope="col">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let depot of depots" class="table-secondary">
-          <td> {{depot.nom_dep}}</td>
-          <td class="lesBouttons">
-            <app-boutton-update
-              type="button"
-              data-bs-toggle="modal"
-              data-bs-target="#staticBackdrop1"
-              class="me-2"
-              (click)="getDepot(depot.id_dep)">
-            </app-boutton-update>
+<div class="card mt-4 widthTable"  data-aos="fade-down" >
 
-            <app-boutton-delete
+  <table class="table table-striped">
+    <thead class="table-dark">
+      <tr>
+        <th scope="col">Depot name</th>
+        <th scope="col">Emplacement</th>
+        <th scope="col">Volume actuel</th>
+        <th scope="col">Volume max</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let depot of depots" class="table-secondary">
+        <!-- Appel de la méthode pour formater le nom du dépôt -->
+        <td>{{ depot.nom_dep }}</td>
+        <td>{{ depot.emplacement }}</td>
+        <td>{{ depot.volume_actuel }} </td>
+        <td>{{ depot.volume_max }}</td>
+        <td class="lesBouttons">
+          <button
+            type="button"
+            class="btn btn-warning me-2"
+            data-bs-toggle="modal"
+            data-bs-target="#staticBackdrop1"
+            (click)="getDepot(depot.id_dep)"
+          >
+            Update
+          </button>
+  
+          <button
             type="button"
             class="btn btn-danger"
             data-bs-toggle="modal"
             data-bs-target="#exampleModal"
-            (click)="getDepot(depot.id_dep)">
-            </app-boutton-delete>
-          </td>
-
-        </tr>
+            (click)="getDepot(depot.id_dep)"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+    </tbody>
   </table>
+  
+
+  
 
   <!-- avec de ngx-pagination -->
 

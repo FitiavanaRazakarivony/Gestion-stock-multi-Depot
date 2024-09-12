@@ -17,12 +17,16 @@ exports.creerDepot = async (req, res) =>{
 exports.listeDepot = async(req, res) =>{
     try {
         const page = req.query.page;
+        const nbrEl = 5;
+        const result = await depotService.findAll(page, nbrEl);
 
-        const depot = await depotRepository.findAll(page);
-        res.status(200).json(depot);
-
-    } catch (erreur) {
-        res.status(400).json({erreur:erreur.message});
+        res.status(200).json({
+            page: page,
+            depots: result
+        })
+    } catch (error) {
+        console.log('erreur', error);
+        res.status(500).json({ error: 'Erreur lors de la récupération des données' });
     }
 }
 
