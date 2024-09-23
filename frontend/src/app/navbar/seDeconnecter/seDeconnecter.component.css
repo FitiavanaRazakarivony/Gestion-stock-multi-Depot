@@ -1,0 +1,11 @@
+.btnVert{
+    width: 26px;
+    height:20px;
+    border-radius: 50%;
+    background-color:green;
+}
+.actifLogin{
+    display: flex ;
+    align-items: center;
+    position: fixed;
+}

@@ -1,0 +1,127 @@
+<!-- Liste stock centrée avec produit sur la deuxième ligne -->
+<div class="d-flex justify-content-center">
+  <div class="card mt-4 widthTable" data-aos="fade-down">
+    <table class="table table-striped text-center">
+      <thead class="table-dark">
+        <tr>
+          <th scope="col">Produit</th>
+          <th scope="col">Dépot</th>
+          <th scope="col">Quantité</th>
+          <th scope="col">Volume produit</th>
+          <th scope="col" colspan="4">Emplacements</th>
+          <th scope="col">Action</th>
+        </tr>
+        <tr class="table-dark">
+          <th colspan="4"></th>
+          <th scope="col">Emplacement</th>
+          <th scope="col">Volume maximal</th>
+          <th scope="col">Volume actuel</th>
+          <th scope="col">Pourcentage occupé</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let stock of stocks" class="table-secondary">
+          <td class="align-middle">
+            <p class="mb-0">{{ stock.produit.designation_p }}</p>
+          </td>
+          <td class="align-middle">{{ stock.depot.nom_dep }}</td>
+          <td class="align-middle">{{ stock.qtt_st }}</td>
+          <td class="align-middle">{{ stock.produit.volume }} m³</td>
+          
+          
+          @if(stock.depot.emplacements.length !==0 ){
+            
+            <td colspan="4">
+              <table class="table table-sm mb-0 text-end">
+                <tbody>
+                  <tr *ngFor="let emplacement of stock.depot.emplacements">
+                    <td>{{ emplacement.nom_em }}</td>
+                    <td>{{ emplacement.volume_max }} m³</td>
+                    <td>{{ emplacement.volume_actuel }} m³</td>
+                    <td>{{ emplacement.pourcentage | number: '1.2-2' }}%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+
+          }@else{
+            <td colspan="4">
+              <table class="table table-sm mb-0 text-end">
+                <tbody>
+                  <tr>
+                    <td>Aucun emplacement</td>
+                    <td>Aucun emplacement</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+            </td>
+          }     
+
+          <td>
+            <!-- <app-boutton-delete
+              type="button"
+              class="btn btn-danger ms-2"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
+              (click)="setIdDelete(stock.id_st)">
+            </app-boutton-delete> -->
+            <button
+              class="btn btn-primary ms-2"
+              type="button"
+              data-bs-toggle="offcanvas"
+              data-bs-target="#offcanvasRight"
+              aria-controls="offcanvasRight"
+              (click)="voirLeDetail(stock.id_st)">
+              <i class="fa fa-eye" aria-hidden="true"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="stocks.length === 0" class="text-center">
+      <h3>Aucun stock disponible</h3>
+    </div>
+  </div>
+</div>
+
+
+<!-- modal OUI / Non -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h5 class="modal-title" id="exampleModalLabel">êtes-vous sûr de supprimer ?</h5>
+      </div>
+      <div class="modal-footer position-relative">
+        <button type="button" data-bs-dismiss="modal" class="btn btn-danger-non me-2">NON</button>
+        <button type="button" data-bs-dismiss="modal" class="btn btn-success ms-2" (click)="supprimer(idDelete!)" >OUI</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Historique stock -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+  <div class="offcanvas-header">
+    <h5 id="offcanvasRightLabel">Historique stock</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+
+    <div>
+      <span *ngIf="histoStock">
+        <b>Nom depôt</b>  : {{histoStock.depot.nom_dep}} <br>
+        <b>Nom produit</b>  : {{histoStock.produit.designation_p}} <br>
+        <b>Quantité stock</b> : {{histoStock.qtt_st}} <br>
+     </span>
+    </div>
+
+  </div>
+</div>
+

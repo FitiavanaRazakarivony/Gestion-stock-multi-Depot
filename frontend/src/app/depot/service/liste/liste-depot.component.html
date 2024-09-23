@@ -1,0 +1,194 @@
+<!-- Liste Depot -->
+
+<div class="card mt-4 widthTable"  data-aos="fade-down" >
+
+  <table class="table table-striped text-center" >
+    <thead class="table-dark">
+      <tr>
+        <th scope="col">Dépot</th>
+        <th scope="col" colspan="2"></th>
+        <th scope="col" colspan="2"></th>
+        <th scope="col" colspan="4">Emplacement</th>
+        <th scope="col">Action</th>
+      </tr>
+      <tr class="table-dark text-center">
+        <th colspan="5"></th>
+        <th scope="col" >Emplacement</th>
+        <th scope="col">Volume maximal</th>
+        <th scope="col">Volume actuel</th>
+        <th scope="col">Pourcentage</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let depot of depots" class="table-secondary">
+        <!-- Appel de la méthode pour formater le nom du dépôt -->
+        <td class="align-middle">{{ depot.nom_dep }}</td>
+        <td></td>
+        <td></td>
+        @if(depot.emplacements.length !== 0){
+          <td colspan="6">
+            <table class="table table-sm mb-0 text-end">
+              <tbody>
+                <tr *ngFor="let emplacement of depot.emplacements">
+                  
+                  <td>{{ emplacement.nom_em }}</td>
+                  <td>{{ emplacement.volume_max }} m³</td>
+                  <td>{{ emplacement.volume_actuel }} m³</td>
+                  <td>{{ emplacement.pourcentage | number: '1.2-2'}} %</td>         
+
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        }@else{
+          <td colspan="6">
+            <table class="table table-sm mb-0 text-center">
+              <tbody>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td>Aucun emplacement</td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        }
+        
+        <td>
+          <app-boutton-update
+            type="button"
+            class="me-2"
+            data-bs-toggle="modal"
+            data-bs-target="#staticBackdrop1"
+            (click)="getDepot(depot.id_dep)"
+          >
+            Update
+          </app-boutton-update>
+  
+          <app-boutton-delete
+            type="button"
+            class="btn btn-danger"
+            data-bs-toggle="modal"
+            data-bs-target="#exampleModal"
+            (click)="getDepot(depot.id_dep)"
+          >
+            Delete
+          </app-boutton-delete>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="depots.length === 0">
+    <h3>Aucune Dépot</h3>
+  </div>
+  <!-- avec de ngx-pagination -->
+<!-- 
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-end">
+      <li class="page-item disabled" [class.disabled]=" page === 1 ">
+        <a class="page-link" (click)="handlePageChange(page - 1)">Previous</a>
+      </li>
+      <li class="page-item" *ngFor="let page of [].constructor(totalPage()); let i= index" [class.active]="i + 1 === page">
+        <a class="page-link" (click)="handlePageChange(i + 1)">{{ i + 1}}</a>
+      </li>
+
+      <li class="page-item" [class.disabled]="page === totalPage()">
+        <a class="page-link" (click)="handlePageChange(page + 1)">Next</a>
+      </li>
+    </ul>
+  </nav> -->
+
+  
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-end">
+      <li class="page-item disabled" [class.disabled]=" page === 1 ">
+        <a class="page-link" (click)="handlePageChange(page - 1)">Previous</a>
+      </li>
+      <li class="page-item" *ngFor="let page of [].constructor(totalPage()); let i= index" [class.active]="i + 1 === page">
+        <a class="page-link" (click)="handlePageChange(i + 1)">{{ i + 1}}</a>
+      </li>
+
+      <li class="page-item" [class.disabled]="page === totalPage()">
+        <a class="page-link" (click)="handlePageChange(page + 1)">Next</a>
+      </li>
+    </ul>
+  </nav>
+  
+  <!-- pas de ngx-pagination -->
+
+  <!-- <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-end">
+      <li class="page-item" [class.disabled]="page === 1">
+        <a class="page-link" (click)="page > 1 && handlePageChange(page - 1)">Previous</a>
+      </li>
+
+      <li class="page-item" *ngFor="let page of [].constructor(totalPage()); let i = index" [class.active]="i + 1 === page">
+        <a class="page-link" (click)="handlePageChange(i + 1)">{{ i + 1 }}</a>
+      </li>
+
+      <li class="page-item" [class.disabled]="page === totalPage()">
+        <a class="page-link" (click)="page < totalPage() && handlePageChange(page + 1)">Next</a>
+      </li>
+    </ul>
+  </nav>
+
+  <pagination-controls (pageChange)="handlePageChange($event)" [maxSize]="5" [autoHide]="true"></pagination-controls> -->
+
+</div>
+
+<!-- Modal Modification -->
+
+<!-- Modal Modification -->
+<div  class="modal fade" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">{{titreModal}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" *ngIf="idDepot">
+        <form [formGroup]="myForm" class="row g-3" (ngSubmit)="modification()">
+
+          <div class="">
+            <label for="validationDefault01" class="form-label">Nom dépot</label>
+            <input type="text" class="form-control" id="validationDefault01" formControlName="nom_dep" [(ngModel)]="nom_dep" required>
+            <!-- Affichage du message d'erreur si le champ nom_dep est invalide -->
+            <div *ngIf="myForm.get('nom_dep')?.invalid && myForm.get('nom_dep')?.touched">
+              <small class="text-danger" *ngIf="myForm.get('nom_dep')?.errors?.['required']">
+                The repository name is required.
+              </small>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-success" [disabled]="myForm.invalid" data-bs-dismiss="modal">Validate</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- modal OUI / Non -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h5 class="modal-title" id="exampleModalLabel">êtes-vous sûr de supprimer ?</h5>
+      </div>
+      <div class="modal-footer position-relative">
+        <button type="button" data-bs-dismiss="modal" class="btn btn-danger-non me-2">NON</button>
+        <button type="button" data-bs-dismiss="modal" class="btn btn-success ms-2" (click)="supprimerDep(idDepot!)" >OUI</button>
+      </div>
+    </div>
+  </div>
+
+</div>

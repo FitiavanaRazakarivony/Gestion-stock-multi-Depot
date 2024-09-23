@@ -1,0 +1,59 @@
+<!-- Liste Produit -->
+<div class="card mt-4" data-aos="fade-down">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Photo</th>
+        <th scope="col">Désignation</th>
+        <th scope="col">Categorie</th>
+        <th scope="col">Poids</th>
+        <th scope="col">Prix</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let produit of produits">
+        <td>
+          <img class="image" src ="http://localhost:8080/fichier/{{produit.photo_p}}" alt="image">
+        </td>
+        <td>{{produit.designation_p}}</td>
+        <td>{{produit.categorie_p}}</td>
+        <td>{{produit.poid_p}}</td>
+        <td>{{produit.prix_p}}</td>
+        <td>
+          <!-- <button type="button" class="btn btn-dark me-2">Modif</button> -->
+          <button
+              type="button"
+              class="btn btn-danger ms-2"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModal"
+          >supp</button>
+          <button
+            class="btn btn-primary ms-3"
+            type="button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasRight"
+            aria-controls="offcanvasRight">Vue</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- modal OUI / Non -->
+<div *ngFor="let produit of produits" class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h5 class="modal-title" id="exampleModalLabel">êtes-vous sûr de supprimer ?</h5>
+      </div>
+      <div class="modal-footer position-relative">
+        <button type="button" data-bs-dismiss="modal" class="btn btn-danger me-2">NON</button>
+        <button type="button" data-bs-dismiss="modal" class="btn btn-success ms-2" (click)="supprimerProduit(produit.id_p)" >OUI</button>
+      </div>
+    </div>
+  </div>
+</div>

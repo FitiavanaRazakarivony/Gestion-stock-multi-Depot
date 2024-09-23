@@ -1,0 +1,210 @@
+<!-- Liste emplacement -->
+
+<div class="card mt-4 widthTable"  data-aos="fade-down">
+  <table class="table table-striped text-center">
+      <thead class="table-dark">
+        <tr>
+          <th scope="col">Dépot</th>
+          <th scope="col">Emplacement</th>
+          <th scope="col">Longeur</th>
+          <th scope="col">Largeur</th>
+          <th scope="col">Hauteur</th>
+          <th scope="col">Volume max</th>
+          <th scope="col">Volume actuel</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let emplacement of Emplacements" class="table-secondary">
+          <td> {{emplacement.depot.nom_dep}} </td>
+          <td> {{emplacement.nom_em}} </td>
+          <td> {{emplacement.longeur}} m</td>
+          <td> {{emplacement.largeur}} m</td>
+          <td> {{emplacement.hauteur}} m</td>
+          <td> {{emplacement.volume_max}} m³</td>
+          <td> {{emplacement.volume_actuel}} m³</td>
+          <td class="lesBouttons">
+            <app-boutton-update
+              type="button"
+              data-bs-toggle="modal"
+              data-bs-target="#staticBackdrop1"
+              class="me-2"
+              (click)="getEmplacement(emplacement.id_em)">
+            </app-boutton-update>
+
+            <app-boutton-delete
+            type="button"
+            class="btn btn-danger"
+            data-bs-toggle="modal"
+            data-bs-target="#exampleModal"
+            (click)="getEmplacement(emplacement.id_em)">
+            </app-boutton-delete>
+          </td>
+
+        </tr>
+  </table>
+  
+  <div *ngIf="Emplacements.length === 0">
+    <h3>Aucune emplacement</h3>
+  </div>
+
+  <!-- avec de ngx-pagination -->
+
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-end">
+      <li class="page-item disabled" [class.disabled]=" page === 1 ">
+        <a class="page-link" (click)="handlePageChange(page - 1)">Previous</a>
+      </li>
+      <li class="page-item" *ngFor="let page of [].constructor(totalPage()); let i= index" [class.active]="i + 1 === page">
+        <a class="page-link" (click)="handlePageChange(i + 1)">{{ i + 1}}</a>
+      </li>
+
+      <li class="page-item" [class.disabled]="page === totalPage()">
+        <a class="page-link" (click)="handlePageChange(page + 1)">Next</a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- <app-recherche-emplacement></app-recherche-emplacement> -->
+  <!-- pas de ngx-pagination -->
+
+  <!-- <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-end">
+      <li class="page-item" [class.disabled]="page === 1">
+        <a class="page-link" (click)="page > 1 && handlePageChange(page - 1)">Previous</a>
+      </li>
+
+      <li class="page-item" *ngFor="let page of [].constructor(totalPage()); let i = index" [class.active]="i + 1 === page">
+        <a class="page-link" (click)="handlePageChange(i + 1)">{{ i + 1 }}</a>
+      </li>
+
+      <li class="page-item" [class.disabled]="page === totalPage()">
+        <a class="page-link" (click)="page < totalPage() && handlePageChange(page + 1)">Next</a>
+      </li>
+    </ul>
+  </nav>
+  <pagination-controls (pageChange)="handlePageChange($event)" [maxSize]="5" [autoHide]="true"></pagination-controls> -->
+
+</div>
+
+<!-- Modal Modification -->
+<div  class="modal fade" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Modification emplacement</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" *ngIf="idEmplacement">
+        
+        <form [formGroup]="myForm" class="row g-3" (ngSubmit)="modification()">
+
+          <!-- name -->
+          <div class="">
+            <label for="validationDefault01" class="form-label">Name</label>
+            <input type="text" class="form-control" id="validationDefault01" formControlName="nom_em" [(ngModel)]="Emplacement.nom_em" required>
+            <!-- Affichage du message d'erreur si le champ nom_em est invalide -->
+            <div *ngIf="myForm.get('nom_em')?.invalid && myForm.get('nom_em')?.touched">
+              <small class="text-danger" *ngIf="myForm.get('nom_em')?.errors?.['required']">
+                The repository name is required.
+              </small>
+            </div>
+          </div>
+
+          <!-- depot -->
+          <div>
+            <label for="validationDefault01" class="form-label">Depot</label>
+            <select class="form-select" aria-label="Default select example" [(ngModel)]="Emplacement.id_dep" name="id_dep" formControlName="id_dep">
+                <option *ngFor="let depot of depots" [value]="depot.id_dep">
+                  <span > {{depot.nom_dep}} </span>
+                </option>
+            </select>
+
+            <div *ngIf="myForm.get('id_dep')?.invalid && myForm.get('id_dep')?.touched">
+              <small class="text-danger" *ngIf="myForm.get('id_dep')?.errors?.['required']">
+                The repository depot required.
+              </small>
+            </div>
+          </div>
+
+            <!-- largeur -->
+          <div class="col-md-6">
+            <label for="largeur" class="form-label">Largeur</label>
+            <input formControlName="largeur" class="form-control" id="largeur" type="number" [(ngModel)]="Emplacement.largeur" required>
+
+            <div *ngIf="myForm.get('largeur')?.invalid && myForm.get('largeur')?.touched">
+              <small class="text-danger" *ngIf="myForm.get('largeur')?.errors?.['required']">
+                The repository Largeur is required.
+              </small>
+              
+                <!-- Erreur pour quantité égale à 0 -->
+                <small class="text-danger" *ngIf="myForm.get('largeur')?.errors?.['zeroQuantity']">
+                  La quantité largeur ne peut pas être inférieur et égale à zéro.
+                </small>
+            </div>
+          </div>
+
+          <!-- longeur -->
+          <div class="col-md-6">
+            <label for="longeur" class="form-label">Longeur</label>
+            <input formControlName="longeur" class="form-control" id="longeur" type="number" [(ngModel)]="Emplacement.longeur" required>
+
+            <div *ngIf="myForm.get('longeur')?.invalid && myForm.get('longeur')?.touched">
+              <small class="text-danger" *ngIf="myForm.get('longeur')?.errors?.['required']">
+                The repository Longeur is required.
+              </small>
+
+              <!-- Erreur pour quantité égale à 0 -->
+              <small class="text-danger" *ngIf="myForm.get('longeur')?.errors?.['zeroQuantity']">
+                La quantité longeur ne peut pas être inférieur et égale à zéro.
+              </small>
+            </div>
+          </div>
+
+          <!-- hauteur -->
+          <div>
+            <label for="hauteur" class="form-label">Height</label>
+            <input formControlName="hauteur" class="form-control" id="hauteur" type="number" [(ngModel)]="Emplacement.hauteur" required>
+
+            <div *ngIf="myForm.get('hauteur')?.invalid && myForm.get('hauteur')?.touched">
+              <small class="text-danger" *ngIf="myForm.get('hauteur')?.errors?.['required']">
+                The repository hauteur is required.
+              </small>
+
+              <!-- Erreur pour quantité égale à 0 -->
+              <small class="text-danger" *ngIf="myForm.get('hauteur')?.errors?.['zeroQuantity']">
+                La quantité hauteur ne peut pas être inférieur et égale égale à zéro.
+              </small>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-success" [disabled]="myForm.invalid" data-bs-dismiss="modal">Validate</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- modal OUI / Non -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h5 class="modal-title" id="exampleModalLabel">êtes-vous sûr de supprimer ?</h5>
+      </div>
+      <div class="modal-footer position-relative">
+        <button type="button" data-bs-dismiss="modal" class="btn btn-danger-non me-2">NON</button>
+        <button type="button" data-bs-dismiss="modal" class="btn btn-success ms-2" (click)="supprimerDep(idEmplacement!)" >OUI</button>
+      </div>
+    </div>
+  </div>
+
+</div>

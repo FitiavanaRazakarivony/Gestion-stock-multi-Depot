@@ -1,0 +1,70 @@
+
+.authentification {
+  max-width: 400px;
+  margin: 50px auto;
+  border-radius: 15px;
+  box-shadow: -2px 10px 20px 2px rgb(250 0 254 / 10%);
+  padding: 4rem;
+
+}
+.login{
+  display: flex;
+  justify-content: center;
+}
+form{
+  display: flex;
+  flex-direction: column;
+}
+.input_text {
+  width: 19rem;
+}
+/* .authentification .form-control {
+  border-radius: 10px;
+  box-shadow: none;
+  border: 1px solid #ced4da;
+  transition: border-color 0.3s ease-in-out;
+}
+.authentification .btn-outline-success,
+.authentification .btn-outline-danger {
+  width: 100px;
+  border-radius: 50px;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.authentification .btn-outline-success:hover,
+.authentification .btn-outline-danger:hover {
+  background-color: #28a745;
+  color: white;
+}
+
+.authentification .btn-outline-danger:hover {
+  background-color: #dc3545;
+  color: white;
+} */
+
+/* .blocLogin{
+  height: 80vh;
+  width: 80vw;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+} */
+
+.boutton{
+  display: flex;
+  justify-content: center;
+}
+
+.blockMere{
+  place-items: center;
+}
+
+.seConnecter{
+  width: 10rem;
+  border-radius: 10rem;
+  background-color: #0c890c;
+  border: 1px solid #0c890c;
+  color: white;
+}
+.seConnecter:hover{
+  background-color: rgb(250, 250, 250);
+  color: rgb(21, 82, 15);
+}

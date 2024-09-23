@@ -1,0 +1,56 @@
+.image{
+  width: 15vh;
+  height: 7vh;
+}
+.modal{
+color: black;
+}
+.page-item{
+cursor: pointer;
+}
+.aucunProd{
+margin: auto;
+}
+
+.imageDetailProduit{
+  width: 20vw;
+  height: 27vh;
+}
+.descriptionProduit{
+  display: flex;
+  column-gap: 22px;
+  flex-wrap:wrap;
+  align-items: center;
+}
+.produitEtStock{
+  display: flex;
+  flex-direction: row;
+  flex-wrap:wrap;
+  column-gap: 13rem;
+}
+.detailListeProduit li{
+  padding-top: 1rem;
+  display: flex;
+  column-gap: 3rem;
+  justify-content: space-between;
+}
+.mouvements{
+  display: flex;
+  flex-wrap:wrap;
+  column-gap: 1rem
+}
+.produit{
+  margin-top: 1rem;
+}
+.emplacements{
+  display: flex;
+}
+
+.fixed-modal {
+  height: 80vh; /* Ajustez la hauteur selon vos besoins */
+}
+
+.modal-body-scrollable {
+  max-height: 60vh; /* Contrôle la hauteur interne du contenu défilable */
+  overflow-y: auto;
+}
