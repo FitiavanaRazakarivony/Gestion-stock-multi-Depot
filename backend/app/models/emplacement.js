@@ -17,6 +17,12 @@ const Emplacement = sequelize.define("emplacement", {
         type: DataTypes.INTEGER,
         allowNull: true,
     },
+    
+    qtt_actuel: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+    },
+
     id_dep: {
         type: DataTypes.INTEGER,
         references: {

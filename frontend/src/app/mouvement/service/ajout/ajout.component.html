@@ -13,6 +13,33 @@
         <div class="modal-body">
 
           <form [formGroup]="myForm" class="row g-3" (ngSubmit)="ajoutMouvement()">
+           
+            <!-- Date -->
+            <div class="">
+              <label for="dateMouvement" class="form-label">Date</label>
+              <input type="date" class="form-control" id="dateMouvement" formControlName="date_mvt" [(ngModel)]="date_mvt">
+              <div *ngIf="myForm.get('date_mvt')?.invalid && myForm.get('date_mvt')?.touched">
+                <small class="text-danger" *ngIf="myForm.get('date_mvt')?.errors?.['required']">
+                  La date est obligatoire.
+                </small>
+              </div>
+            </div>
+
+            <!-- Produit -->
+            <div>
+              <label for="produitMouvement" class="form-label">Produit</label>
+              <select class="form-select" aria-label="Default select example" formControlName="id_p" [(ngModel)]="id_p">
+                <option *ngFor="let produit of produits" [value]="produit.id_p">
+                  {{produit.designation_p}} 
+                </option>
+              </select>
+              <div *ngIf="myForm.get('id_p')?.invalid && myForm.get('id_p')?.touched">
+                <small class="text-danger" *ngIf="myForm.get('id_p')?.errors?.['required']">
+                  Le produit est obligatoire.
+                </small>
+              </div>
+            </div>
+
             <!-- Type Mouvement -->
             <div>
               <label for="typeMouvement" class="form-label">Type mouvement</label>
@@ -25,18 +52,7 @@
                   Le type de mouvement est obligatoire.
                 </small>
               </div>
-            </div>
-
-            <!-- Date -->
-            <div class="">
-              <label for="dateMouvement" class="form-label">Date</label>
-              <input type="date" class="form-control" id="dateMouvement" formControlName="date_mvt" [(ngModel)]="date_mvt">
-              <div *ngIf="myForm.get('date_mvt')?.invalid && myForm.get('date_mvt')?.touched">
-                <small class="text-danger" *ngIf="myForm.get('date_mvt')?.errors?.['required']">
-                  La date est obligatoire.
-                </small>
-              </div>
-            </div>
+            </div>   
 
             <!-- Quantité -->
             <div class="">
@@ -55,6 +71,8 @@
               </div>
             </div>
 
+           
+
             <!-- Dépot -->
             <div>
               <label for="depotMouvement" class="form-label">Dépot</label>
@@ -66,21 +84,6 @@
               <div *ngIf="myForm.get('id_dep')?.invalid && myForm.get('id_dep')?.touched">
                 <small class="text-danger" *ngIf="myForm.get('id_dep')?.errors?.['required']">
                   Le dépot est obligatoire.
-                </small>
-              </div>
-            </div>
-
-            <!-- Produit -->
-            <div>
-              <label for="produitMouvement" class="form-label">Produit</label>
-              <select class="form-select" aria-label="Default select example" formControlName="id_p" [(ngModel)]="id_p">
-                <option *ngFor="let produit of produits" [value]="produit.id_p">
-                  {{produit.designation_p}} 
-                </option>
-              </select>
-              <div *ngIf="myForm.get('id_p')?.invalid && myForm.get('id_p')?.touched">
-                <small class="text-danger" *ngIf="myForm.get('id_p')?.errors?.['required']">
-                  Le produit est obligatoire.
                 </small>
               </div>
             </div>

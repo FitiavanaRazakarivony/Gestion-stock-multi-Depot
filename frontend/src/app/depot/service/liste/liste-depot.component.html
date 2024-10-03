@@ -140,13 +140,11 @@
 </div>
 
 <!-- Modal Modification -->
-
-<!-- Modal Modification -->
 <div  class="modal fade" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">{{titreModal}}</h5>
+        <h5 class="modal-title" id="staticBackdropLabel">Modification dépot</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body" *ngIf="idDepot">
@@ -168,6 +166,7 @@
             <button type="submit" class="btn btn-success" [disabled]="myForm.invalid" data-bs-dismiss="modal">Validate</button>
           </div>
         </form>
+
       </div>
     </div>
   </div>

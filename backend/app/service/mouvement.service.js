@@ -1,5 +1,5 @@
 
-const { Op, json, Error } = require('sequelize');
+const { Op, json, Error, where, Sequelize } = require('sequelize');
 const Depot = require('../models/depot');
 const depotRepository = require('../repository/depot.repository');
 const mouvementRepository = require('../repository/mouvement.repository');
@@ -12,10 +12,6 @@ const emplacementService = require('./emplacement.service');
 class mouvementService{
     async create(data){
         return await mouvementRepository.create(data)
-    }
-
-    async findAll (){
-        return await stockRepository.findAll()
     }
     
     async getIdMouv(id){
@@ -48,6 +44,10 @@ class mouvementService{
             // creation mouvement
             return await this.create(data)
         }
+    }
+
+    async findAll (){
+       return await Emplacement.findAll();
     }
 
     async updateStock_dep_pro(stock, qtt_mvt, type_mvt){
@@ -88,6 +88,28 @@ class mouvementService{
     async findStockByProdDep(id_dep, id_p){
         return await stockRepository.findStockByProdDep(id_dep, id_p);
     }
+    async updateEmplacement(id_em,nouvelleQuantite){
+
+        return await Emplacement.update(
+            { 
+                qtt_actuel: nouvelleQuantite,
+                volume_actuel: nouvelleQuantite
+            },
+            { where: { id_em } }
+        );
+
+    }
+    async updateVolume_actuel(id_em,updateVolume_actuel){
+        return await Emplacement.update(
+            {
+                volume_actuel : updateVolume_actuel,
+            },
+            { where: { id_em }}
+        )
+    }
+    async findOneEmplacement(id_em){
+        return await Emplacement.findOne({ where: {id_em}})
+    }
 
     async findDepotProduitCreation(qtt_mvt, type_mvt, id_dep, id_p){
 
@@ -98,77 +120,123 @@ class mouvementService{
             stock = JSON.parse(stock)
             return  await this.updateStock_dep_pro(stock, qtt_mvt, type_mvt) // ataov n modif
         }else 
+        
         return  await this.createNewStock(id_p, id_dep, qtt_mvt, type_mvt) //raha tss de mcreer
     }
 
-    // Répartir le volume_p entre les emplacements en fonction de l'espace disponible
-    distributeVolume(volume_p, emplacements) {
-        // Calculer l'espace total disponible en soustrayant `volume_actuel` de `volume_max` pour chaque emplacement
+    distributeQtt(qtt_mvt, emplacements) {
+        // Calculer l'espace total disponible en soustrayant `qtt_actuelle` de `volume_max` pour chaque emplacement
         const espaceTotalDisponible = emplacements.reduce((total, emplacement) => {
-            // Calculer l'espace disponible pour cet emplacement
-           const volume_max = emplacement.dataValues.longeur * emplacement.dataValues.largeur * emplacement.dataValues.hauteur
-            const espaceDisponible = volume_max - emplacement.dataValues.volume_actuel;
-            // Ajouter cet espace disponible au total
+            const volume_max = emplacement.dataValues.longeur * emplacement.dataValues.largeur * emplacement.dataValues.hauteur
+            const qtt_actuel = emplacement.dataValues.qtt_actuel || 0;  // Utiliser 0 si qtt_actuel est indéfini
+            const espaceDisponible = volume_max - qtt_actuel;
             return total + espaceDisponible;
         }, 0);
-
-        // Répartir le volume_p proportionnellement à l'espace disponible dans chaque emplacement
+    
+        // Si aucun espace disponible, retourner une erreur
+        if (espaceTotalDisponible === 0) {
+            throw new Error('Aucun espace disponible pour le mouvement.');
+        }
+    
+        // Répartir la quantité `qtt_mvt` proportionnellement à l'espace disponible dans chaque emplacement
         return emplacements.map(emplacement => {
-            // Calculer l'espace disponible pour cet 
             const volume_max = emplacement.dataValues.longeur * emplacement.dataValues.largeur * emplacement.dataValues.hauteur
-            const espaceDisponible = volume_max - emplacement.dataValues.volume_actuel;
-            // Calculer le volume à attribuer à cet emplacement en fonction de sa part de l'espace total disponible
-            const volumeReparti = Math.round((espaceDisponible / espaceTotalDisponible) * volume_p);
-            // Retourner l'ID de l'emplacement et le volume réparti
+            const qtt_actuel = emplacement.dataValues.qtt_actuel || 0;
+            const espaceDisponible = volume_max - qtt_actuel;
+    
+            // Calculer la quantité répartie pour cet emplacement
+            const qttRepartie = Math.min(Math.round((espaceDisponible / espaceTotalDisponible) * qtt_mvt), espaceDisponible);
+    
             return {
                 id_em: emplacement.dataValues.id_em,
-                volume_p: volumeReparti
+                qtt_mvt: qttRepartie
             };
         });
     }
 
-    async distributeVolume_modification_volume_actuel(volume_p, emplacements) {
-        // Répartir le volume entre les emplacements en fonction de l'espace disponible
-        const repartition = this.distributeVolume(volume_p, emplacements);        
+    async distributeQtt_modification_qtt_actuelle(volume_p, qtt_mvt, emplacements) {
+        // Répartir la quantité entre les emplacements
+        const repartition = this.distributeQtt(qtt_mvt, emplacements);
+    
         // Si la répartition échoue, retourner une erreur
-        if (!repartition) return { erreur: 'Erreur dans la répartition du volume' };
-
-        // Parcourir chaque emplacement et mettre à jour la quantité actuelle (`volume_actuel`)
-        for (const { id_em, volume_p } of repartition) {
-            // Trouver l'emplacement correspondant dans la liste des emplacements
+        if (!repartition) {
+            return { erreur: 'Erreur dans la répartition de la quantité' };
+        }
+    
+        // Mettre à jour la quantité actuelle (`qtt_actuel`) pour chaque emplacement
+        for (const { id_em, qtt_mvt: qttRepartie } of repartition) {
             const emplacement = emplacements.find(emp => emp.dataValues.id_em === id_em);
-
+    
             if (emplacement) {
-                // Rechercher l'emplacement dans la base de données pour obtenir les valeurs actuelles de `volume_actuel` et `volume_max`
-                const emplacementDb = await Emplacement.findOne({ where: { id_em } });
-
+                // Rechercher les informations de l'emplacement dans la base de données
+                const emplacementDb = await this.findOneEmplacement(id_em);
+                console.log('emplacementDb----', emplacementDb);
+    
                 if (emplacementDb) {
-                    // Obtenir la quantité maximale (volume_max) de l'emplacement
-                    const ancien_volume_max = emplacementDb.volume_max;
-                    // Calculer la nouvelle quantité actuelle en ajoutant le volume réparti
-                    const nouvelleQuantite = emplacementDb.volume_actuel + volume_p;
-                    // Vérifier si la nouvelle quantité dépasse la capacité maximale (volume_max)
-                    if (nouvelleQuantite <= ancien_volume_max) {
-                        // Mettre à jour `volume_actuel` avec la nouvelle quantité dans la base de données
-                        await Emplacement.update(
-                            { volume_actuel: nouvelleQuantite },
-                            { where: { id_em } }
-                        );
-                        // Afficher un message indiquant que l'emplacement a été mis à jour avec succès
-                        console.log(`Emplacement ID ${id_em} mis à jour avec volume_actuel: ${nouvelleQuantite}`);
-                    }                
-                    else {
-                        // Si la nouvelle quantité dépasse la capacité maximale, lancer une erreur
-                        throw new Error(`La nouvelle quantité (${nouvelleQuantite}) dépasse la capacité maximale (${ancien_volume_max}) pour l'emplacement ${emplacementDb.nom_em} car la capacité actuel est: ${emplacementDb.volume_actuel}, donc changer le dépot` );
-                    }
+                    const volume_max = emplacementDb.volume_max || 0;                    
+                    const qtt_actuelle = emplacementDb.qtt_actuel;    
+                    
+                    //Calculer la nouvelle quantité
+                    await this.calculNouvellQuantite(qtt_actuelle,qttRepartie,qtt_mvt,volume_p,id_em,volume_max )
+                    
                 } else {
-                    // Si l'emplacement n'est pas trouvé dans la base de données, afficher un message d'erreur
                     console.log(`Emplacement ID ${id_em} introuvable dans la base de données.`);
                 }
             }
         }
-    }  
+    }
 
+    //function Calculer la nouvelle quantité
+    
+    async calculNouvellQuantite(qtt_actuelle,qttRepartie,qtt_mvt,volume_p,id_em,volume_max) {
+        const nouvelleQuantite = qtt_actuelle + qttRepartie;
+        const nouvelleVolume_actuel = qtt_mvt * volume_p;
+
+        if(volume_max >= nouvelleVolume_actuel){
+            await this.updateEmplacement(id_em,nouvelleQuantite);
+            const emplacementById = await this.findOneEmplacement(id_em);
+            let updateVolume_actuel =  emplacementById.dataValues.qtt_actuel * nouvelleVolume_actuel; 
+            await this.updateVolume_actuel(id_em, updateVolume_actuel);
+        }
+         else {
+            throw new Error(`error. Changer autre dépot`);
+        }
+
+    }
+    
+    async verifierVolume(id_em, qtt_mvt, volume_p) {
+        try {
+            // Rechercher l'emplacement par son identifiant (id_em)
+            const emplacement = await findOneEmplacement(id_em);
+    
+            if (!emplacement) {
+                throw new Error(`Emplacement avec ID ${id_em} introuvable.`);
+            }
+    
+            // Récupérer les volumes actuels et maximums de l'emplacement
+
+            const volume_max = emplacement.longeur * emplacement.largeur * emplacement.hauteur;
+            const volume_actuel = emplacement.volume_actuel;
+    
+            console.log(`Volume actuel: ${volume_actuel} m³, Volume maximum: ${volume_max} m³`);
+    
+            // Calculer le nouveau volume après le mouvement
+            const nouvelleVolume_actuel = volume_actuel + (qtt_mvt * volume_p);
+    
+            // Vérifier si le nouveau volume dépasse le volume maximal
+            if (nouvelleVolume_actuel > volume_max) {
+
+                throw new Error(`Erreur: Le volume actuel (${nouvelleVolume_actuel} m³) dépasse la capacité maximale (${volume_max} m³). Mouvement annulé.`);
+            }
+    
+            // Si tout est correct, continuer avec la mise à jour du mouvement
+            console.log('Mouvement autorisé, continuer avec la mise à jour.');
+            return { succes: true };
+        } catch (error) {
+            console.error(error.message);
+            return { erreur: error.message };
+        }
+    }
     
 }
 

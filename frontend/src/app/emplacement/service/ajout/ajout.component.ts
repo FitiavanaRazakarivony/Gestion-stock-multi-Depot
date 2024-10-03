@@ -28,6 +28,7 @@ export class AjoutEmplacementComponent implements OnInit {
     id_em : 0,
     nom_em:'',
     volume_actuel:0,
+    qtt_actuel:0,
     id_dep:0,
     longeur: 0,
     largeur: 0,
@@ -38,6 +39,7 @@ export class AjoutEmplacementComponent implements OnInit {
   idEmplacement: any = null;
   nom_em: string = 'A1';
   volume_actuel:number = 0 ;
+  qtt_actuel:number = 0;
   id_dep!:number ;
   longeur!: number;
   largeur!: number;
@@ -113,6 +115,7 @@ export class AjoutEmplacementComponent implements OnInit {
       this.idEmplacement, 
       this.nom_em,
       this.volume_actuel,
+      this.qtt_actuel,
       this.id_dep,
       this.largeur,
       this.longeur,

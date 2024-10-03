@@ -35,5 +35,4 @@ class stockService{
     }    
     
 }
-
 module.exports = new stockService();

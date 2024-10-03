@@ -14,8 +14,8 @@
         <tr class="table-dark">
           <th colspan="4"></th>
           <th scope="col">Emplacement</th>
-          <th scope="col">Volume maximal</th>
           <th scope="col">Volume actuel</th>
+          <th scope="col">Quatité actuel</th>
           <th scope="col">Pourcentage occupé</th>
           <th></th>
         </tr>
@@ -32,18 +32,18 @@
           
           @if(stock.depot.emplacements.length !==0 ){
             
-            <td colspan="4">
-              <table class="table table-sm mb-0 text-end">
-                <tbody>
-                  <tr *ngFor="let emplacement of stock.depot.emplacements">
-                    <td>{{ emplacement.nom_em }}</td>
-                    <td>{{ emplacement.volume_max }} m³</td>
-                    <td>{{ emplacement.volume_actuel }} m³</td>
-                    <td>{{ emplacement.pourcentage | number: '1.2-2' }}%</td>
-                  </tr>
-                </tbody>
-              </table>
-            </td>
+          <td colspan="4">
+            <table class="table table-sm mb-0 text-center">
+              <tbody>
+                <tr *ngFor="let emplacement of stock.depot.emplacements">
+                  <td>{{ emplacement.nom_em }}</td>
+                  <td>{{ emplacement.volume_actuel }} m³</td>
+                  <td>{{ emplacement.qtt_actuel }}</td>
+                  <td>{{ emplacement.pourcentage | number: '1.2-2' }}%</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
 
           }@else{
             <td colspan="4">
@@ -61,14 +61,14 @@
           }     
 
           <td>
-            <!-- <app-boutton-delete
+            <app-boutton-delete
               type="button"
               class="btn btn-danger ms-2"
               data-bs-toggle="modal"
               data-bs-target="#exampleModal"
               (click)="setIdDelete(stock.id_st)">
-            </app-boutton-delete> -->
-            <button
+            </app-boutton-delete>
+            <!-- <button
               class="btn btn-primary ms-2"
               type="button"
               data-bs-toggle="offcanvas"
@@ -76,7 +76,7 @@
               aria-controls="offcanvasRight"
               (click)="voirLeDetail(stock.id_st)">
               <i class="fa fa-eye" aria-hidden="true"></i>
-            </button>
+            </button> -->
           </td>
         </tr>
       </tbody>
@@ -86,7 +86,6 @@
     </div>
   </div>
 </div>
-
 
 <!-- modal OUI / Non -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

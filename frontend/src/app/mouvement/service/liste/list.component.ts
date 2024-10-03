@@ -125,7 +125,7 @@ export class ListeMouvementomponent extends AjoutMouvementComponent implements O
     });
     Toast.fire({
       icon: "success",
-      title: "update succes"
+      title: "delete succes"
     })
   }
   errorSuprr(){

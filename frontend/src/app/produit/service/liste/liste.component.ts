@@ -1,10 +1,6 @@
-import { Component, Input, numberAttribute } from '@angular/core';
-import { ProduitService } from '../produit.service';
-import Swal from 'sweetalert2';
-import { Produit } from '../../produit.model';
+import { Component } from '@angular/core';
 import { AjoutProduitComponent } from '../ajout/ajout.component';
 import { environment } from '../../../../environments/environments';
-import { MouvementService } from '../../../mouvement/service/mouvement.service';
 
 @Component({
   selector: 'app-list-produit',
@@ -13,7 +9,7 @@ import { MouvementService } from '../../../mouvement/service/mouvement.service';
 })
 export class ListeProduitComponent extends AjoutProduitComponent{
 
-  environment:string = environment.imageLocalhostUrl;
+  environment:string = environment.imageLocalhostUrl
   
   searchResults: any[] = [];
   searchTerm: string = '';

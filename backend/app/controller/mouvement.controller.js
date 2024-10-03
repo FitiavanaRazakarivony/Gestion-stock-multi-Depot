@@ -34,46 +34,61 @@ exports.creerMouvement = async (req, res) => {
         const volume_p = produit.longeur * produit.largeur * produit.hauteur;
         if (volume_p <= 0) return res.status(400).json({ erreur: 'Volume du produit non défini ou invalide' });
 
-            if (type_mvt == "Entrée") {
-                
-                 // Vérifier l'utilisateur
-                 const utilisateur = await Utilisateur.findByPk(id_ut);
-                 if (!utilisateur) return res.status(404).json({ erreur: 'Utilisateur invalide' });
- 
-                 // Créer le mouvement
-                 const newMouvement = await mouvementService.createMouvement(id_p, id_dep, type_mvt, date_mvt, qtt_mvt, id_ut, id);
- 
-                 // Réponse avec succès
-                 res.status(201).json({
-                     message: 'Création du mouvement avec succès',
-                     mouvement: newMouvement,
-                     utilisateur,
-                     depot,
-                     produit
-                 });
-                console.log('volume_p', volume_p);
+        // Vérifier l'utilisateur
+        const utilisateur = await Utilisateur.findByPk(id_ut);
+        if (!utilisateur) return res.status(404).json({ erreur: 'Utilisateur invalide' });
 
-                await mouvementService.distributeVolume_modification_volume_actuel(volume_p, emplacements)
+        // Vérifier le mouvement d'entrée
+        if (type_mvt === "Entrée") {
+            // Calculer le volume total du produit (volume_p * qtt_mvt)
+            const total_volume_mvt = volume_p * qtt_mvt;
 
-            } else {
-                // Vérifier l'utilisateur
-                const utilisateur = await Utilisateur.findByPk(id_ut);
-                if (!utilisateur) return res.status(404).json({ erreur: 'Utilisateur invalide' });
+            // Vérifier si le volume total dépasse la capacité du dépôt
+            let volume_max_total = 0;
+            let volume_actuel_total = 0;
 
-                // Créer le mouvement
-                const newMouvement = await mouvementService.createMouvement(id_p, id_dep, type_mvt, date_mvt, qtt_mvt, id_ut, id);
+            // Calculer le volume maximal et actuel total pour tous les emplacements
+            emplacements.forEach(emplacement => {
+                volume_max_total += emplacement.volume_max;
+                volume_actuel_total += emplacement.volume_actuel;
+            });
 
-                // Réponse avec succès
-                res.status(201).json({
-                    message: 'Création du mouvement avec succès',
-                    mouvement: newMouvement,
-                    utilisateur,
-                    depot,
-                    produit
-                });
+            const nouvelle_volume_actuel = volume_actuel_total + total_volume_mvt;
+
+            if (nouvelle_volume_actuel > volume_max_total) {
+                // Annuler la création du mouvement si le volume dépasse
+                return res.status(400).json({ erreur: 'Le volume total du mouvement dépasse la capacité maximale du dépôt.' });
             }
 
-            
+            // Si la vérification passe, procéder à la modification de la quantité
+            await mouvementService.distributeQtt_modification_qtt_actuelle(volume_p, qtt_mvt, emplacements);
+
+            // Créer le mouvement
+            const newMouvement = await mouvementService.createMouvement(id_p, id_dep, type_mvt, date_mvt, qtt_mvt, id_ut, id);
+
+            // Réponse avec succès
+            return res.status(201).json({
+                message: 'Création du mouvement avec succès',
+                mouvement: newMouvement,
+                utilisateur,
+                depot,
+                produit
+            });
+
+        } else {
+            // Mouvement de sortie (par exemple)
+            const newMouvement = await mouvementService.createMouvement(id_p, id_dep, type_mvt, date_mvt, qtt_mvt, id_ut, id);
+
+            // Réponse avec succès
+            return res.status(201).json({
+                message: 'Création du mouvement avec succès',
+                mouvement: newMouvement,
+                utilisateur,
+                depot,
+                produit
+            });
+        }
+
     } catch (erreur) {
         console.error("Erreur lors de la création du mouvement : ", erreur);
         res.status(500).json({ erreur: erreur.message });
